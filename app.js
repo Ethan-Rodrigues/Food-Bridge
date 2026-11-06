@@ -1,70 +1,71 @@
 /**
  * FoodBridge — Stop Food Waste Platform
- * Core Interactive Application Logic
+ * Dynamic Interactive Application Logic 2.0
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
+  initMissionClock();
+  initHubCitySelector();
   initAnimatedCounters();
   initImpactCalculator();
+  initCoverageChecker();
   initHowItWorksTabs();
   initStoryFilters();
   initFaqAccordion();
   initRescueToast();
-  initRadarTime();
   initModalTriggers();
 });
 
 /* ================= 1. NAVBAR & NAVIGATION ================= */
 function initNavbar() {
   const navbar = document.getElementById('navbar');
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-  const mobileNav = document.getElementById('mobileNav');
-  const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+  const mobileToggle = document.getElementById('mobileToggle');
+  const mobileDrawer = document.getElementById('mobileDrawer');
+  const mobileLinks = document.querySelectorAll('.mobile-link');
 
-  // Sticky Navbar shadow on scroll
+  // Sticky Navbar background on scroll
   window.addEventListener('scroll', () => {
     if (window.scrollY > 30) {
       navbar.classList.add('scrolled');
     } else {
       navbar.classList.remove('scrolled');
     }
-    updateActiveNav();
+    highlightActiveNav();
   });
 
   // Mobile menu toggle
-  if (mobileMenuBtn && mobileNav) {
-    mobileMenuBtn.addEventListener('click', () => {
-      const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
-      mobileMenuBtn.setAttribute('aria-expanded', !isExpanded);
-      mobileMenuBtn.classList.toggle('active');
-      mobileNav.classList.toggle('open');
+  if (mobileToggle && mobileDrawer) {
+    mobileToggle.addEventListener('click', () => {
+      const isExpanded = mobileToggle.getAttribute('aria-expanded') === 'true';
+      mobileToggle.setAttribute('aria-expanded', !isExpanded);
+      mobileToggle.classList.toggle('active');
+      mobileDrawer.classList.toggle('open');
     });
 
-    // Close mobile menu on link click
-    navLinks.forEach(link => {
+    mobileLinks.forEach(link => {
       link.addEventListener('click', () => {
-        mobileMenuBtn.classList.remove('active');
-        mobileNav.classList.remove('open');
-        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileToggle.classList.remove('active');
+        mobileDrawer.classList.remove('open');
+        mobileToggle.setAttribute('aria-expanded', 'false');
       });
     });
   }
 
-  // ScrollSpy: Highlight active section in navigation
-  function updateActiveNav() {
+  // Highlight active section on scroll
+  function highlightActiveNav() {
     const sections = document.querySelectorAll('section[id]');
-    const scrollY = window.pageYOffset + 120;
+    const scrollPos = window.pageYOffset + 140;
 
-    sections.forEach(current => {
-      const sectionHeight = current.offsetHeight;
-      const sectionTop = current.offsetTop;
-      const sectionId = current.getAttribute('id');
+    sections.forEach(sec => {
+      const top = sec.offsetTop;
+      const height = sec.offsetHeight;
+      const id = sec.getAttribute('id');
 
-      if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-        document.querySelectorAll('.nav-link').forEach(link => {
+      if (scrollPos >= top && scrollPos < top + height) {
+        document.querySelectorAll('.nav-item').forEach(link => {
           link.classList.remove('active');
-          if (link.getAttribute('href') === `#${sectionId}`) {
+          if (link.getAttribute('href') === `#${id}`) {
             link.classList.add('active');
           }
         });
@@ -73,212 +74,264 @@ function initNavbar() {
   }
 }
 
-/* ================= 2. ANIMATED METRIC COUNTERS ================= */
+/* ================= 2. LIVE MISSION CONTROL CLOCK ================= */
+function initMissionClock() {
+  const clockEl = document.getElementById('missionClock');
+  if (!clockEl) return;
+
+  function update() {
+    const now = new Date();
+    const utcStr = now.toTimeString().split(' ')[0] + ' UTC';
+    clockEl.textContent = utcStr;
+  }
+  update();
+  setInterval(update, 1000);
+}
+
+/* ================= 3. REGIONAL HUB SWITCHER ================= */
+function initHubCitySelector() {
+  const hubSelect = document.getElementById('hubCitySelect');
+  const headlineEl = document.getElementById('topTickerHeadline');
+
+  if (!hubSelect) return;
+
+  const hubData = {
+    nyc: {
+      headline: "<strong>38 Active Food Rescues</strong> in progress right now across New York Metro",
+      city: "New York Metro"
+    },
+    sf: {
+      headline: "<strong>26 Active Food Rescues</strong> in progress across San Francisco & Oakland",
+      city: "San Francisco Bay"
+    },
+    chi: {
+      headline: "<strong>31 Active Food Rescues</strong> in progress across Chicago Greater Area",
+      city: "Chicago Greater"
+    },
+    ldn: {
+      headline: "<strong>44 Active Food Rescues</strong> in progress across Greater London & Boroughs",
+      city: "London Hub"
+    },
+    atx: {
+      headline: "<strong>19 Active Food Rescues</strong> in progress across Austin & Central Texas",
+      city: "Austin Central"
+    }
+  };
+
+  hubSelect.addEventListener('change', (e) => {
+    const selected = hubData[e.target.value];
+    if (selected && headlineEl) {
+      headlineEl.innerHTML = selected.headline;
+    }
+  });
+}
+
+/* ================= 4. ANIMATED METRIC COUNTERS ================= */
 function initAnimatedCounters() {
-  const counters = [
-    { id: 'counterMeals', target: 2450890, prefix: '', suffix: '+' },
-    { id: 'counterCo2', target: 1225, prefix: '', suffix: ' MT' },
-    { id: 'counterWater', target: 8600000, prefix: '', suffix: ' L' },
-    { id: 'counterTime', target: 38, prefix: '< ', suffix: ' min' }
-  ];
+  const mealsEl = document.getElementById('heroMealsDelivered');
+  const sheltersEl = document.getElementById('heroSheltersCount');
 
-  let hasAnimated = false;
-  const impactSection = document.getElementById('impact');
-
-  if (!impactSection) return;
+  let animated = false;
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting && !hasAnimated) {
-        hasAnimated = true;
-        counters.forEach(counter => animateSingleCounter(counter));
+      if (entry.isIntersecting && !animated) {
+        animated = true;
+        if (mealsEl) animateNumber(mealsEl, 2450890, 2000);
+        if (sheltersEl) animateNumber(sheltersEl, 380, 1500);
       }
     });
-  }, { threshold: 0.2 });
+  }, { threshold: 0.1 });
 
-  observer.observe(impactSection);
+  const heroSection = document.getElementById('hero');
+  if (heroSection) observer.observe(heroSection);
 
-  function animateSingleCounter({ id, target, prefix, suffix }) {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    const duration = 2000; // ms
-    const frameDuration = 1000 / 60;
-    const totalFrames = Math.round(duration / frameDuration);
+  function animateNumber(element, target, duration) {
+    const frameRate = 1000 / 60;
+    const totalFrames = Math.round(duration / frameRate);
     let frame = 0;
 
-    const easeOutQuad = t => t * (2 - t);
+    const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
 
     const timer = setInterval(() => {
       frame++;
-      const progress = easeOutQuad(frame / totalFrames);
-      const current = Math.round(target * progress);
+      const progress = easeOutCubic(frame / totalFrames);
+      const val = Math.round(target * progress);
 
-      el.textContent = `${prefix}${current.toLocaleString()}${suffix}`;
+      element.textContent = val.toLocaleString();
 
-      if (frame === totalFrames) {
+      if (frame >= totalFrames) {
         clearInterval(timer);
-        el.textContent = `${prefix}${target.toLocaleString()}${suffix}`;
+        element.textContent = target.toLocaleString();
       }
-    }, frameDuration);
+    }, frameRate);
   }
 }
 
-/* ================= 3. INTERACTIVE IMPACT CALCULATOR ================= */
+/* ================= 5. INTERACTIVE IMPACT CALCULATOR ================= */
 function initImpactCalculator() {
-  const slider = document.getElementById('surplusSlider');
-  const weightDisplay = document.getElementById('surplusWeightDisplay');
-  const donorTypeSelect = document.getElementById('donorTypeSelect');
-  const presetBtns = document.querySelectorAll('.preset-btn');
-  const pledgeBtn = document.getElementById('calcPledgeBtn');
+  const slider = document.getElementById('calcSlider');
+  const weightDisplay = document.getElementById('calcWeightNumber');
+  const facilitySelect = document.getElementById('calcFacilityType');
+  const presetPills = document.querySelectorAll('.preset-pill');
+  const pledgeBtn = document.getElementById('pledgeSurplusBtn');
 
-  const resMeals = document.getElementById('resMeals');
-  const resCo2 = document.getElementById('resCo2');
-  const resTrees = document.getElementById('resTrees');
-  const resWater = document.getElementById('resWater');
-  const resTax = document.getElementById('resTax');
+  const resMeals = document.getElementById('calcMealsResult');
+  const resCo2 = document.getElementById('calcCo2Result');
+  const resCars = document.getElementById('calcCarsResult');
+  const resWater = document.getElementById('calcWaterResult');
+  const resTax = document.getElementById('calcTaxResult');
 
   if (!slider) return;
 
-  function updateCalculator(weight) {
+  function calculate(weight) {
     if (weightDisplay) weightDisplay.textContent = weight.toLocaleString();
 
-    // Calculations based on EPA & FAO food rescue averages
+    // Calculations based on EPA WARM model and UN FAO food rescue factors
     const meals = Math.round(weight * 2); // 1kg ≈ 2 meals
     const co2Kg = Math.round(weight * 2.5); // 1kg saved ≈ 2.5kg CO2e avoided
-    const trees = Math.max(1, Math.round(co2Kg / 22)); // 1 tree offsets ~22kg/yr
+    const cars = (co2Kg / 220).toFixed(1); // 1 passenger car emits ~220kg CO2/month
     const waterLiters = Math.round(weight * 500); // 1kg food ≈ 500L lifecycle water
-    const taxValue = Math.round(weight * 6); // $6 estimated charitable fair-market value
+    const taxWriteOff = Math.round(weight * 6); // $6 standard charitable deduction per kg
 
     if (resMeals) resMeals.textContent = meals.toLocaleString();
     if (resCo2) resCo2.textContent = `${co2Kg.toLocaleString()} kg`;
-    if (resTrees) resTrees.textContent = trees.toLocaleString();
+    if (resCars) resCars.textContent = cars;
     if (resWater) resWater.textContent = `${waterLiters.toLocaleString()} L`;
-    if (resTax) resTax.textContent = `$${taxValue.toLocaleString()}`;
+    if (resTax) resTax.textContent = `$${taxWriteOff.toLocaleString()}`;
   }
 
   slider.addEventListener('input', (e) => {
     const val = parseInt(e.target.value, 10);
-    updateCalculator(val);
+    calculate(val);
 
-    // Update active preset button highlight
-    presetBtns.forEach(btn => {
-      btn.classList.toggle('active', parseInt(btn.dataset.weight, 10) === val);
+    presetPills.forEach(pill => {
+      pill.classList.toggle('active', parseInt(pill.dataset.kg, 10) === val);
     });
   });
 
-  presetBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      presetBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const weight = parseInt(btn.dataset.weight, 10);
-      slider.value = weight;
-      updateCalculator(weight);
+  presetPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      presetPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const val = parseInt(pill.dataset.kg, 10);
+      slider.value = val;
+      calculate(val);
     });
   });
 
-  if (donorTypeSelect) {
-    donorTypeSelect.addEventListener('change', () => {
-      // Small visual flourish or default adjustments based on type
-      const mapDefaults = {
-        restaurant: 80,
+  if (facilitySelect) {
+    facilitySelect.addEventListener('change', () => {
+      const defaults = {
         hotel: 250,
-        event: 600,
-        corporate: 180,
-        bakery: 70,
-        household: 30
+        restaurant: 75,
+        wedding: 600,
+        corporate: 200,
+        bakery: 60,
+        residential: 35
       };
-      const def = mapDefaults[donorTypeSelect.value] || 250;
-      slider.value = def;
-      updateCalculator(def);
+      const defVal = defaults[facilitySelect.value] || 250;
+      slider.value = defVal;
+      calculate(defVal);
     });
   }
 
-  // Pre-fill donation modal when user clicks "Pledge This Surplus Now"
   if (pledgeBtn) {
     pledgeBtn.addEventListener('click', () => {
       openModal('donateModal');
       const portionsInput = document.getElementById('foodPortions');
-      const donorCategorySelect = document.getElementById('donorCategory');
-      
+      const catSelect = document.getElementById('donorCategory');
+
       const currentWeight = parseInt(slider.value, 10);
-      if (portionsInput) {
-        portionsInput.value = currentWeight * 2;
-      }
-      if (donorCategorySelect && donorTypeSelect) {
-        donorCategorySelect.value = capitalizeFirst(donorTypeSelect.value);
+      if (portionsInput) portionsInput.value = currentWeight * 2;
+      if (catSelect && facilitySelect) {
+        catSelect.value = capitalizeFirst(facilitySelect.value);
       }
     });
   }
 
-  // Initial calculation
-  updateCalculator(parseInt(slider.value, 10));
+  // Initial Calculation
+  calculate(parseInt(slider.value, 10));
 }
 
-function capitalizeFirst(str) {
-  if (!str) return 'Restaurant';
+function capitalizeFirst(val) {
   const map = {
-    restaurant: 'Restaurant',
     hotel: 'Hotel',
-    event: 'Event',
-    bakery: 'Bakery',
+    restaurant: 'Restaurant',
+    wedding: 'Event',
     corporate: 'Corporate',
-    household: 'Household'
+    bakery: 'Bakery',
+    residential: 'Restaurant'
   };
-  return map[str] || 'Restaurant';
+  return map[val] || 'Restaurant';
 }
 
-/* ================= 4. HOW IT WORKS TABS ================= */
+/* ================= 6. LIVE COVERAGE CHECKER ================= */
+function initCoverageChecker() {
+  window.checkCoverage = function(e) {
+    e.preventDefault();
+    const input = document.getElementById('coverageInput');
+    const resultBox = document.getElementById('coverageResult');
+    const cityName = document.getElementById('resCityName');
+
+    if (!input || !resultBox) return;
+
+    const query = input.value.trim();
+    if (!query) return;
+
+    if (cityName) cityName.textContent = query;
+    resultBox.classList.remove('hidden');
+
+    // Smooth scroll into focus
+    resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+}
+
+/* ================= 7. HOW IT WORKS TABS ================= */
 function initHowItWorksTabs() {
-  const tabDonor = document.getElementById('tabDonor');
-  const tabNgo = document.getElementById('tabNgo');
-  const donorSteps = document.getElementById('donor-steps');
-  const ngoSteps = document.getElementById('ngo-steps');
+  const tabBtnDonor = document.getElementById('tabBtnDonor');
+  const tabBtnNgo = document.getElementById('tabBtnNgo');
+  const donorPanels = document.getElementById('donorPanels');
+  const ngoPanels = document.getElementById('ngoPanels');
 
-  if (!tabDonor || !tabNgo) return;
+  if (!tabBtnDonor || !tabBtnNgo) return;
 
-  tabDonor.addEventListener('click', () => {
-    tabDonor.classList.add('active');
-    tabDonor.setAttribute('aria-selected', 'true');
-    tabNgo.classList.remove('active');
-    tabNgo.setAttribute('aria-selected', 'false');
+  tabBtnDonor.addEventListener('click', () => {
+    tabBtnDonor.classList.add('active');
+    tabBtnDonor.setAttribute('aria-selected', 'true');
+    tabBtnNgo.classList.remove('active');
+    tabBtnNgo.setAttribute('aria-selected', 'false');
 
-    donorSteps.classList.remove('hidden');
-    donorSteps.classList.add('active');
-    ngoSteps.classList.add('hidden');
-    ngoSteps.classList.remove('active');
+    donorPanels.classList.remove('hidden');
+    ngoPanels.classList.add('hidden');
   });
 
-  tabNgo.addEventListener('click', () => {
-    tabNgo.classList.add('active');
-    tabNgo.setAttribute('aria-selected', 'true');
-    tabDonor.classList.remove('active');
-    tabDonor.setAttribute('aria-selected', 'false');
+  tabBtnNgo.addEventListener('click', () => {
+    tabBtnNgo.classList.add('active');
+    tabBtnNgo.setAttribute('aria-selected', 'true');
+    tabBtnDonor.classList.remove('active');
+    tabBtnDonor.setAttribute('aria-selected', 'false');
 
-    ngoSteps.classList.remove('hidden');
-    ngoSteps.classList.add('active');
-    donorSteps.classList.add('hidden');
-    donorSteps.classList.remove('active');
+    ngoPanels.classList.remove('hidden');
+    donorPanels.classList.add('hidden');
   });
 }
 
-/* ================= 5. COMMUNITY STORIES FILTER ================= */
+/* ================= 8. COMMUNITY STORIES FILTER ================= */
 function initStoryFilters() {
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const storyCards = document.querySelectorAll('.story-card');
+  const pills = document.querySelectorAll('.filter-pill');
+  const cards = document.querySelectorAll('.story-card');
 
-  if (!filterBtns.length) return;
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      const filter = pill.dataset.filter;
 
-      const filter = btn.dataset.filter;
-
-      storyCards.forEach(card => {
-        const category = card.dataset.category;
-        if (filter === 'all' || category === filter) {
+      cards.forEach(card => {
+        const cat = card.dataset.category;
+        if (filter === 'all' || cat === filter) {
           card.style.display = 'flex';
         } else {
           card.style.display = 'none';
@@ -288,89 +341,88 @@ function initStoryFilters() {
   });
 }
 
-/* ================= 6. FAQ ACCORDION ================= */
+/* ================= 9. FAQ ACCORDION ================= */
 function initFaqAccordion() {
-  const faqItems = document.querySelectorAll('.faq-item');
+  const faqBoxes = document.querySelectorAll('.faq-box');
 
-  faqItems.forEach(item => {
-    const trigger = item.querySelector('.faq-trigger');
-    if (!trigger) return;
+  faqBoxes.forEach(box => {
+    const btn = box.querySelector('.faq-question-btn');
+    if (!btn) return;
 
-    trigger.addEventListener('click', () => {
-      const isOpen = item.classList.contains('active');
+    btn.addEventListener('click', () => {
+      const wasActive = box.classList.contains('active');
 
-      // Close all other FAQs for clean single-expand behavior
-      faqItems.forEach(i => {
-        i.classList.remove('active');
-        const t = i.querySelector('.faq-trigger');
-        if (t) t.setAttribute('aria-expanded', 'false');
+      faqBoxes.forEach(b => {
+        b.classList.remove('active');
+        const bBtn = b.querySelector('.faq-question-btn');
+        if (bBtn) bBtn.setAttribute('aria-expanded', 'false');
       });
 
-      if (!isOpen) {
-        item.classList.add('active');
-        trigger.setAttribute('aria-expanded', 'true');
+      if (!wasActive) {
+        box.classList.add('active');
+        btn.setAttribute('aria-expanded', 'true');
       }
     });
   });
 }
 
-/* ================= 7. LIVE RESCUE TICKER TOAST ================= */
+/* ================= 10. LIVE RESCUE TICKER TOAST ================= */
 function initRescueToast() {
   const toast = document.getElementById('rescueToast');
-  const toastTitle = document.getElementById('toastTitle');
-  const toastDesc = document.getElementById('toastDesc');
-  const toastTime = document.getElementById('toastTime');
+  const headline = document.getElementById('toastHeadline');
+  const body = document.getElementById('toastBody');
+  const timestamp = document.getElementById('toastTimestamp');
   const dismissBtn = document.getElementById('dismissToastBtn');
 
   if (!toast) return;
 
-  const mockFeeds = [
+  const feeds = [
     {
       title: "Live Rescue in Progress",
-      desc: "45 Hot meals rescued from The Grand Promenade Hotel → Delivered to St. Jude Youth Shelter (2.4 km)",
+      body: "45 Hot meals rescued from The Grand Promenade → Delivered to St. Jude Youth Shelter (2.4 km)",
       time: "Just now"
     },
     {
-      title: "Rescue Complete",
-      desc: "80 Artisan baguettes & pastries from Le Petit Croissant → Arrived at Hope Haven Kitchen",
-      time: "3 mins ago"
+      title: "Rescue Completed",
+      body: "80 Artisan baguettes & pastries from Le Petit Croissant → Delivered to Hope Haven Kitchen",
+      time: "2 mins ago"
     },
     {
-      title: "Live Dispatch",
-      desc: "140 Wedding dinner servings from Sapphire Banquets → En route to City Senior Center (4°C Insulated)",
-      time: "6 mins ago"
+      title: "Cold-Chain En Route",
+      body: "140 Banquet servings from Sapphire Banquets → Dispatched to Senior Harmony Shelter (4°C Insulated)",
+      time: "5 mins ago"
     },
     {
-      title: "Community Milestone",
-      desc: "Olive Bistro just crossed 1,500 total meals rescued this month!",
-      time: "10 mins ago"
+      title: "Milestone Reached",
+      body: "Olive Bistro just crossed 1,500 total meals rescued this month!",
+      time: "9 mins ago"
     }
   ];
 
-  let currentIndex = 0;
+  let idx = 0;
   let isDismissed = false;
 
-  // Show first toast after 3.5 seconds
+  // Initial trigger
   setTimeout(() => {
-    if (!isDismissed) showNextToast();
-  }, 3500);
+    if (!isDismissed) advanceToast();
+  }, 4000);
 
   // Cycle every 9 seconds
   setInterval(() => {
-    if (!isDismissed) showNextToast();
+    if (!isDismissed) advanceToast();
   }, 9000);
 
-  function showNextToast() {
+  function advanceToast() {
     toast.classList.remove('visible');
 
     setTimeout(() => {
-      const feed = mockFeeds[currentIndex];
-      if (toastTitle) toastTitle.textContent = feed.title;
-      if (toastDesc) toastDesc.textContent = feed.desc;
-      if (toastTime) toastTime.textContent = feed.time;
+      const current = feeds[idx];
+      if (headline) headline.textContent = current.title;
+      if (body) body.textContent = current.body;
+      if (timestamp) timestamp.textContent = current.time;
 
       toast.classList.add('visible');
-      currentIndex = (currentIndex + 1) % mockFeeds.length;
+      idx = (idx + 1) % feeds.length;
     }, 400);
   }
 
@@ -382,43 +434,22 @@ function initRescueToast() {
   }
 }
 
-/* ================= 8. RADAR TIME DISPLAY ================= */
-function initRadarTime() {
-  const timeEl = document.getElementById('liveTimeDisplay');
-  if (!timeEl) return;
-
-  function update() {
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    timeEl.textContent = `LIVE • ${timeStr}`;
-  }
-
-  update();
-  setInterval(update, 1000);
-}
-
-/* ================= 9. MODALS & MULTI-STEP DONATION WIZARD ================= */
+/* ================= 11. MODALS & MULTI-STEP DONATION WIZARD ================= */
 function initModalTriggers() {
-  // Bind all trigger buttons
-  bindBtn('openDonateModalBtn', () => openModal('donateModal'));
-  bindBtn('mobileDonateBtn', () => openModal('donateModal'));
-  bindBtn('heroDonateBtn', () => openModal('donateModal'));
-  bindBtn('howItWorksDonateBtn', () => openModal('donateModal'));
-  bindBtn('ctaDonateBtn', () => openModal('donateModal'));
+  // Bind CTA triggers
+  bindClick('navDonateBtn', () => openModal('donateModal'));
+  bindClick('heroPrimaryDonate', () => openModal('donateModal'));
+  bindClick('mobileDrawerDonate', () => openModal('donateModal'));
 
-  bindBtn('openNgoModalBtn', () => openModal('ngoModal'));
-  bindBtn('mobileNgoBtn', () => openModal('ngoModal'));
-  bindBtn('ctaNgoBtn', () => openModal('ngoModal'));
+  bindClick('navNgoBtn', () => openModal('ngoModal'));
+  bindClick('mobileDrawerNgo', () => openModal('ngoModal'));
 
-  bindBtn('mobileVolunteerBtn', () => openModal('volunteerModal'));
-  bindBtn('ctaVolunteerBtn', () => openModal('volunteerModal'));
+  bindClick('mobileDrawerVol', () => openModal('volunteerModal'));
 
-  // Close modals when clicking backdrop
+  // Close when clicking outside
   document.querySelectorAll('.modal-backdrop').forEach(modal => {
     modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        closeModal(modal.id);
-      }
+      if (e.target === modal) closeModal(modal.id);
     });
   });
 
@@ -432,12 +463,11 @@ function initModalTriggers() {
   });
 }
 
-function bindBtn(id, handler) {
-  const btn = document.getElementById(id);
-  if (btn) btn.addEventListener('click', handler);
+function bindClick(id, handler) {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('click', handler);
 }
 
-// Global modal helpers
 window.openModal = function(id) {
   const modal = document.getElementById(id);
   if (modal) {
@@ -455,99 +485,87 @@ window.closeModal = function(id) {
 };
 
 // Wizard Step Navigation
-window.goToWizardStep = function(stepNum) {
-  // Validate Step 1 before proceeding to 2
+window.nextWizStep = function(stepNum) {
   if (stepNum === 2) {
     const name = document.getElementById('donorName').value.trim();
     const phone = document.getElementById('donorPhone').value.trim();
     const address = document.getElementById('donorAddress').value.trim();
 
     if (!name || !phone || !address) {
-      alert('Please fill in your Kitchen Name, Contact Phone, and Pickup Address before proceeding.');
+      alert('Please fill in your Organization Name, Phone, and Address before continuing.');
       return;
     }
   }
 
-  // Validate Step 2 before proceeding to 3
   if (stepNum === 3) {
     const portions = document.getElementById('foodPortions').value;
-    const hygieneCheck = document.getElementById('hygieneCheck').checked;
+    const hygiene = document.getElementById('hygieneAgreement').checked;
 
     if (!portions || portions <= 0) {
       alert('Please enter estimated food portions.');
       return;
     }
-    if (!hygieneCheck) {
-      alert('Please check the food safety and hygiene certification box.');
+    if (!hygiene) {
+      alert('Please confirm the food hygiene agreement.');
       return;
     }
 
-    // Populate Step 3 Summary
-    const donorName = document.getElementById('donorName').value;
-    const foodType = document.getElementById('foodType').value;
-    const pickupWindow = document.getElementById('pickupWindow').value;
-
-    document.getElementById('sumDonorName').textContent = donorName;
-    document.getElementById('sumFoodType').textContent = foodType;
-    document.getElementById('sumPortions').textContent = `${portions} Servings (~${Math.round(portions / 2)} kg)`;
-    document.getElementById('sumPickup').textContent = pickupWindow;
-    document.getElementById('sumImpactText').textContent = `Feeds ~${portions} people • Offsets ~${Math.round(portions * 1.25)} kg CO2`;
+    // Populate summary
+    document.getElementById('sumName').textContent = document.getElementById('donorName').value;
+    document.getElementById('sumCategory').textContent = document.getElementById('foodCategory').value;
+    document.getElementById('sumPortions').textContent = `${portions} Portions (~${Math.round(portions / 2)} kg)`;
+    document.getElementById('sumSlot').textContent = document.getElementById('pickupSlot').value;
+    document.getElementById('sumImpact').textContent = `Feeds ~${portions} people • Offsets ~${Math.round(portions * 1.25)} kg CO2`;
   }
 
-  // Switch active panels
   for (let i = 1; i <= 3; i++) {
-    const panel = document.getElementById(`wizStep${i}`);
-    const indicator = document.getElementById(`wizStep${i}Indicator`);
+    const panel = document.getElementById(`wizPanel${i}`);
+    const indicator = document.getElementById(`wizInd${i}`);
     if (panel) panel.classList.toggle('active', i === stepNum);
     if (indicator) indicator.classList.toggle('active', i === stepNum);
   }
 };
 
-// Wizard Form Submission
-window.handleDonationSubmit = function(e) {
+// Handle Donation Submit
+window.submitDonation = function(e) {
   e.preventDefault();
-
-  // Hide form panels & show success view
   const form = document.getElementById('donationForm');
-  const successView = document.getElementById('donationSuccess');
-  const trackingEl = document.getElementById('mockTrackingId');
+  const successView = document.getElementById('donateSuccess');
+  const trackIdEl = document.getElementById('dynTrackingId');
 
-  // Generate realistic dispatch tracking ID
   const randomNum = Math.floor(1000 + Math.random() * 9000);
-  if (trackingEl) trackingEl.textContent = `FB-${randomNum}-EXP`;
+  if (trackIdEl) trackIdEl.textContent = `FB-${randomNum}-EXP`;
 
   if (form) form.classList.add('hidden');
   if (successView) successView.classList.remove('hidden');
 };
 
-// NGO Application Submission
-window.handleNgoSubmit = function(e) {
+// Handle NGO Submit
+window.submitNgo = function(e) {
   e.preventDefault();
   const form = document.getElementById('ngoForm');
-  const successView = document.getElementById('ngoSuccess');
-
+  const success = document.getElementById('ngoSuccess');
   if (form) form.classList.add('hidden');
-  if (successView) successView.classList.remove('hidden');
+  if (success) success.classList.remove('hidden');
 };
 
-// Volunteer Application Submission
-window.handleVolunteerSubmit = function(e) {
+// Handle Volunteer Submit
+window.submitVolunteer = function(e) {
   e.preventDefault();
   const form = document.getElementById('volunteerForm');
-  const successView = document.getElementById('volunteerSuccess');
-
+  const success = document.getElementById('volunteerSuccess');
   if (form) form.classList.add('hidden');
-  if (successView) successView.classList.remove('hidden');
+  if (success) success.classList.remove('hidden');
 };
 
-// Newsletter Subscription
+// Handle Newsletter Submit
 window.handleNewsletter = function(e) {
   e.preventDefault();
-  const emailInput = document.getElementById('newsletterEmail');
+  const input = document.getElementById('newsletterInput');
   const feedback = document.getElementById('newsletterFeedback');
 
-  if (emailInput && feedback) {
-    feedback.innerHTML = `<span style="color: #10b981; font-size: 0.8125rem; font-weight: 600; display: block; margin-top: 0.35rem;">✓ Thank you! You've joined FoodBridge's monthly impact briefing.</span>`;
-    emailInput.value = '';
+  if (input && feedback) {
+    feedback.innerHTML = `<span style="color: #10b981; font-size: 0.8125rem; font-weight: 700; display: block; margin-top: 0.5rem;">✓ Thank you! You've joined the FoodBridge monthly impact briefing.</span>`;
+    input.value = '';
   }
 };
