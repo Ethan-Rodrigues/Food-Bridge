@@ -1,0 +1,23 @@
+{
+  "name": "foodbridge",
+  "version": "1.0.0",
+  "description": "FoodBridge — Stop Food Waste, Nourish Lives. A social-impact digital platform connecting surplus food donors with NGOs and communities in need.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'Build complete: Static site ready for Vercel/Render'"
+  },
+  "keywords": [
+    "foodbridge",
+    "stop-food-waste",
+    "food-rescue",
+    "social-impact",
+    "zero-hunger",
+    "sdg2",
+    "sdg12",
+    "sustainability"
+  ],
+  "author": "FoodBridge Initiative",
+  "license": "MIT"
+}
