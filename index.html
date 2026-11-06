@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FoodBridge — Stop Food Waste, Nourish Lives | Real-Time Hyperlocal Food Rescue</title>
-  <meta name="description" content="FoodBridge connects surplus food from restaurants, hotels, banquet halls, and caterers with verified shelters in under 45 minutes using real-time dispatch and temperature-controlled logistics.">
-  <meta name="keywords" content="food rescue, surplus food donation, stop food waste, zero hunger, SDG 2, SDG 12, charity food distribution, cold chain logistics">
+  <meta name="description" content="FoodBridge connects commercial surplus food from restaurants, hotels, and events with verified shelters in under 45 minutes using real-time dispatch and cold-chain logistics.">
+  <meta name="keywords" content="food rescue, stop food waste, hunger relief, surplus food distribution, zero hunger, SDG 2, SDG 12, cold chain logistics">
   
   <!-- Favicon SVG -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23059669' d='M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm-1 5a1 1 0 0 1 2 0v5a1 1 0 0 1-2 0V7zm7.071 3.515a1 1 0 0 1 1.414 1.414l-3.536 3.536a1 1 0 1 1-1.414-1.414l3.536-3.536zM16 17a6 6 0 0 0-6 6h12a6 6 0 0 0-6-6z'/%3E%3Ccircle cx='16' cy='12' r='2' fill='%23f59e0b'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%2310b981' d='M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm-1 5a1 1 0 0 1 2 0v5a1 1 0 0 1-2 0V7zm7.071 3.515a1 1 0 0 1 1.414 1.414l-3.536 3.536a1 1 0 1 1-1.414-1.414l3.536-3.536zM16 17a6 6 0 0 0-6 6h12a6 6 0 0 0-6-6z'/%3E%3Ccircle cx='16' cy='12' r='2' fill='%23f59e0b'/%3E%3C/svg%3E">
 
-  <!-- Fonts: Plus Jakarta Sans & Inter -->
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
@@ -18,378 +18,371 @@
   <!-- Core Stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-white">
+<body class="bg-obsidian text-slate-100 antialiased selection:bg-emerald-500 selection:text-white">
 
-  <!-- ================= 0. TOP TICKER & LIVE NETWORK STATUS ================= -->
-  <div class="top-announcement-bar" role="region" aria-label="System Announcement">
-    <div class="container bar-content">
-      <div class="bar-left">
+  <!-- ================= 0. TOP DISPATCH RADAR BAR ================= -->
+  <aside class="top-radar-bar" role="region" aria-label="System Live Status">
+    <div class="container radar-bar-inner">
+      <div class="radar-bar-left">
         <span class="live-pulse-badge">
-          <span class="ping-dot"></span>
-          <span class="solid-dot"></span>
-          LIVE RADAR
+          <span class="pulse-ring-anim"></span>
+          <span class="pulse-solid"></span>
+          LIVE RESCUE RADAR
         </span>
-        <span class="bar-headline" id="topTickerHeadline">
-          <strong>38 Active Food Rescues</strong> in progress right now across 14 metropolitan hubs
+        <span class="radar-status-text" id="topLiveStatus">
+          <strong>38 Active Food Rescues</strong> in progress across 14 metropolitan hubs
         </span>
       </div>
-      <div class="bar-right">
-        <div class="city-selector-wrap">
-          <label for="hubCitySelect" class="sr-only">Select Regional Dispatch Hub</label>
-          <span class="hub-icon">📍</span>
-          <select id="hubCitySelect" class="hub-select" aria-label="Select city hub">
-            <option value="sf">San Francisco Bay (Active)</option>
-            <option value="nyc" selected>New York Metro (Active)</option>
-            <option value="chi">Chicago Greater (Active)</option>
-            <option value="ldn">London Hub (Active)</option>
-            <option value="atx">Austin / Central TX (Active)</option>
+      <div class="radar-bar-right">
+        <!-- City Hub Selector -->
+        <div class="hub-select-wrapper">
+          <span class="hub-pin">📍</span>
+          <label for="hubSelector" class="sr-only">Choose Regional Dispatch Hub</label>
+          <select id="hubSelector" class="hub-dropdown" aria-label="Select city dispatch hub">
+            <option value="nyc" selected>New York Metro (Active: 38)</option>
+            <option value="sf">San Francisco Bay (Active: 26)</option>
+            <option value="chi">Chicago Greater (Active: 31)</option>
+            <option value="ldn">London Boroughs (Active: 44)</option>
+            <option value="atx">Austin Central (Active: 19)</option>
           </select>
         </div>
-        <span class="samaritan-pill">
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Good Samaritan Protected
+
+        <span class="good-samaritan-pill">
+          <svg class="w-3.5 h-3.5 text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          100% Good Samaritan Shielded
         </span>
       </div>
     </div>
-  </div>
+  </aside>
 
-  <!-- ================= NAVIGATION BAR ================= -->
-  <header class="site-header" id="navbar">
-    <div class="container header-inner">
+  <!-- ================= 1. FLOATING NAVIGATION BAR ================= -->
+  <header class="header-nav" id="navbar">
+    <div class="container header-container">
       <!-- Brand Logo -->
       <a href="#" class="brand-link" aria-label="FoodBridge Homepage">
-        <div class="brand-mark">
-          <div class="brand-mark-glow"></div>
+        <div class="brand-icon-wrap">
+          <div class="brand-icon-glow"></div>
           <svg class="brand-svg" viewBox="0 0 44 44" fill="none">
-            <rect width="44" height="44" rx="12" fill="url(#brandG)" />
-            <path d="M14 24C14 18.4772 18.4772 14 24 14C29.5228 14 34 18.4772 34 24" stroke="white" stroke-width="3" stroke-linecap="round"/>
-            <path d="M17 31C19 28 21.5 26.5 24 26.5C26.5 26.5 29 28 31 31" stroke="white" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="24" cy="20" r="3.5" fill="#FDE047"/>
+            <rect width="44" height="44" rx="12" fill="url(#brandGrad)" />
+            <path d="M13 24C13 17.925 17.925 13 24 13C30.075 13 35 17.925 35 24" stroke="white" stroke-width="3" stroke-linecap="round"/>
+            <path d="M16 31C18.5 27.5 21 26 24 26C27 26 29.5 27.5 32 31" stroke="white" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="24" cy="19.5" r="3.5" fill="#FDE047"/>
             <path d="M10 33H34" stroke="#34D399" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="2 3"/>
             <defs>
-              <linearGradient id="brandG" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+              <linearGradient id="brandGrad" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
                 <stop stop-color="#059669"/>
                 <stop offset="1" stop-color="#10B981"/>
               </linearGradient>
             </defs>
           </svg>
         </div>
-        <div class="brand-names">
-          <span class="brand-title">Food<span class="brand-accent">Bridge</span></span>
-          <span class="brand-subtitle">Hyperlocal Food Rescue</span>
+        <div class="brand-text-block">
+          <span class="brand-name">Food<span class="brand-name-accent">Bridge</span></span>
+          <span class="brand-tag">Stop Food Waste &bull; Feed Hope</span>
         </div>
       </a>
 
-      <!-- Desktop Nav -->
-      <nav class="desktop-nav" aria-label="Main Navigation">
-        <a href="#problem" class="nav-item">The Problem</a>
-        <a href="#solution" class="nav-item">Our Solution</a>
-        <a href="#how-it-works" class="nav-item">How It Works</a>
-        <a href="#coverage" class="nav-item">Live Coverage</a>
-        <a href="#features" class="nav-item">Capabilities</a>
-        <a href="#impact" class="nav-item">Impact Metrics</a>
-        <a href="#stories" class="nav-item">Stories</a>
-        <a href="#faq" class="nav-item">FAQ</a>
+      <!-- Desktop Links -->
+      <nav class="desktop-menu" aria-label="Primary Navigation">
+        <a href="#problem" class="menu-item">The Problem</a>
+        <a href="#solution" class="menu-item">Our Solution</a>
+        <a href="#how-it-works" class="menu-item">How It Works</a>
+        <a href="#comparison" class="menu-item">Before & After</a>
+        <a href="#features" class="menu-item">Capabilities</a>
+        <a href="#calculator" class="menu-item">Impact Calculator</a>
+        <a href="#stories" class="menu-item">Stories</a>
+        <a href="#faq" class="menu-item">FAQ</a>
       </nav>
 
-      <!-- Nav CTA -->
-      <div class="header-actions">
-        <button class="btn btn-ghost" id="navNgoBtn">For NGOs</button>
-        <button class="btn btn-emerald" id="navDonateBtn">
-          <svg class="btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+      <!-- Nav Action CTAs -->
+      <div class="nav-actions">
+        <button class="btn btn-ghost" id="openNgoModalBtn">Partner as NGO</button>
+        <button class="btn btn-emerald shadow-emerald-glow" id="openDonateModalBtn">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
           <span>Donate Food</span>
         </button>
-        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
+
+        <!-- Mobile Toggle Button -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span class="btn-bar"></span>
+          <span class="btn-bar"></span>
+          <span class="btn-bar"></span>
         </button>
       </div>
     </div>
 
     <!-- Mobile Drawer -->
     <div class="mobile-drawer" id="mobileDrawer">
-      <div class="mobile-drawer-inner">
-        <a href="#problem" class="mobile-link">The Problem</a>
-        <a href="#solution" class="mobile-link">Our Solution</a>
-        <a href="#how-it-works" class="mobile-link">How It Works</a>
-        <a href="#coverage" class="mobile-link">Live Coverage</a>
-        <a href="#features" class="mobile-link">Key Features</a>
-        <a href="#impact" class="mobile-link">Impact Calculator</a>
-        <a href="#stories" class="mobile-link">Community Stories</a>
-        <a href="#faq" class="mobile-link">FAQ</a>
-        <div class="mobile-drawer-btns">
-          <button class="btn btn-emerald w-full" id="mobileDrawerDonate">Schedule Surplus Pickup</button>
-          <button class="btn btn-ghost w-full" id="mobileDrawerNgo">Register as Verified NGO</button>
-          <button class="btn btn-outline-white w-full" id="mobileDrawerVol">Join Rescue Volunteer Squad</button>
+      <div class="mobile-drawer-content">
+        <a href="#problem" class="mobile-nav-item">The Problem</a>
+        <a href="#solution" class="mobile-nav-item">Our Solution</a>
+        <a href="#how-it-works" class="mobile-nav-item">How It Works</a>
+        <a href="#comparison" class="mobile-nav-item">Before & After</a>
+        <a href="#features" class="mobile-nav-item">Capabilities</a>
+        <a href="#calculator" class="mobile-nav-item">Impact Calculator</a>
+        <a href="#stories" class="mobile-nav-item">Community Stories</a>
+        <a href="#faq" class="mobile-nav-item">FAQ</a>
+        <div class="mobile-cta-group">
+          <button class="btn btn-emerald w-full" id="mobDonateBtn">Schedule Surplus Pickup</button>
+          <button class="btn btn-ghost w-full" id="mobNgoBtn">Register as Verified NGO</button>
+          <button class="btn btn-outline-white w-full" id="mobVolBtn">Join Rescue Volunteer Squad</button>
         </div>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- ================= 1. HERO SECTION WITH LIVE DISPATCH RADAR ================= -->
+    <!-- ================= 2. HERO SECTION WITH DISPATCH RADAR ================= -->
     <section class="hero-section" id="hero">
-      <div class="hero-mesh-bg"></div>
-      <div class="hero-ambient-glow glow-emerald"></div>
-      <div class="hero-ambient-glow glow-amber"></div>
+      <div class="hero-aurora-bg"></div>
+      <div class="hero-glow-blob blob-emerald"></div>
+      <div class="hero-glow-blob blob-amber"></div>
 
-      <div class="container hero-grid">
-        <!-- Hero Text -->
-        <div class="hero-copy">
-          <div class="hero-tag-pill">
-            <span class="tag-sparkle">✨</span>
-            <span class="tag-text">AI Hyperlocal Cold-Chain Logistics</span>
-            <span class="tag-divider">|</span>
-            <span class="tag-bold">Door-to-Plate in &lt; 42 Mins</span>
+      <div class="container hero-layout">
+        <!-- Hero Copy -->
+        <div class="hero-text-col">
+          <div class="hero-badge-pill">
+            <span class="badge-spark">✨</span>
+            <span class="badge-label">AI Hyperlocal Cold-Chain Logistics</span>
+            <span class="badge-sep">|</span>
+            <span class="badge-highlight">Door-to-Plate &lt; 38 Mins</span>
           </div>
 
-          <h1 class="hero-headline">
-            Turning Commercial <br>
-            <span class="gradient-text-emerald">Surplus Food</span> into <br>
-            <span class="gradient-text-amber">Nourished Communities</span>.
+          <h1 class="hero-title">
+            Transform Commercial <br>
+            <span class="text-grad-emerald">Surplus Food</span> Into <br>
+            <span class="text-grad-amber">Shared Sustenance</span>.
           </h1>
 
-          <p class="hero-lead">
-            Every night, premier hotels, restaurants, bakeries, and banquets prepare wholesome, gourmet meals that go unserved. FoodBridge's real-time intelligent dispatch matches surplus hot meals with verified local shelters in 90 seconds, complete with temperature-controlled transit and certified carbon offset receipts.
+          <p class="hero-description">
+            Every night, commercial kitchens discard wholesome gourmet meals while millions go to bed hungry. FoodBridge's intelligent dispatch engine matches excess prepared food with verified local shelters in <strong>under 90 seconds</strong> — backed by temperature-controlled transport and certified tax write-offs.
           </p>
 
-          <!-- Action Buttons -->
-          <div class="hero-actions">
-            <button class="btn btn-emerald btn-xl shadow-glow" id="heroPrimaryDonate">
-              <svg class="btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              <span>Schedule Food Donation</span>
-              <span class="btn-badge">Free</span>
+          <!-- Dual CTAs -->
+          <div class="hero-cta-row">
+            <button class="btn btn-emerald btn-hero shadow-emerald-glow" id="heroDonateCta">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <span>Schedule Surplus Pickup</span>
+              <span class="pill-tag">Free &bull; 60s</span>
             </button>
-            <a href="#calculator" class="btn btn-glass btn-xl">
-              <svg class="btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-              <span>Calculate Your Impact</span>
+            <a href="#calculator" class="btn btn-glass btn-hero">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              <span>Simulate Your Impact</span>
             </a>
           </div>
 
-          <!-- Live Trust Telemetry -->
-          <div class="hero-telemetry">
-            <div class="telemetry-item">
-              <div class="telemetry-val"><span id="heroMealsDelivered">2,450,890</span>+</div>
-              <div class="telemetry-lbl">Nutritious Meals Saved</div>
+          <!-- Hero Metrics Ticker -->
+          <div class="hero-counter-strip">
+            <div class="counter-item">
+              <div class="counter-num" id="heroMealsDelivered">2,450,890</div>
+              <div class="counter-text">Meals Delivered</div>
             </div>
-            <div class="telemetry-sep"></div>
-            <div class="telemetry-item">
-              <div class="telemetry-val"><span id="heroSheltersCount">380</span>+</div>
-              <div class="telemetry-lbl">Vetted NGO Shelters</div>
+            <div class="counter-divider"></div>
+            <div class="counter-item">
+              <div class="counter-num" id="heroSheltersCount">380+</div>
+              <div class="counter-text">Verified Shelters</div>
             </div>
-            <div class="telemetry-sep"></div>
-            <div class="telemetry-item">
-              <div class="telemetry-val">100%</div>
-              <div class="telemetry-lbl">Food Safety Audited</div>
+            <div class="counter-divider"></div>
+            <div class="counter-item">
+              <div class="counter-num">100%</div>
+              <div class="counter-text">Food Safety Audited</div>
             </div>
           </div>
         </div>
 
-        <!-- Hero Visual: Interactive Dispatch Mission Control -->
-        <div class="hero-display">
-          <div class="mission-card">
-            <!-- Card Header -->
-            <div class="mission-header">
-              <div class="mission-status">
-                <span class="pulse-ring"></span>
-                <span class="mission-title">Active Dispatch Terminal #FB-904</span>
+        <!-- Hero Mission Control Visual -->
+        <div class="hero-visual-col">
+          <div class="mission-control-box">
+            <div class="mc-header">
+              <div class="mc-status">
+                <span class="mc-dot"></span>
+                <span class="mc-title">Dispatch Telemetry #FB-904</span>
               </div>
-              <div class="mission-live-clock" id="missionClock">18:42:10 UTC</div>
+              <div class="mc-clock" id="missionControlClock">18:42:15 UTC</div>
             </div>
 
-            <!-- Simulated Map Canvas / Visual Radar Grid -->
-            <div class="mission-canvas">
-              <div class="canvas-grid-pattern"></div>
-              <div class="canvas-radar-sweep"></div>
+            <div class="mc-screen">
+              <div class="screen-grid-overlay"></div>
+              <div class="screen-radar-cone"></div>
 
-              <!-- Hotspot 1: Commercial Donor -->
-              <div class="canvas-node node-donor" style="top: 22%; left: 16%;">
-                <div class="node-ripple"></div>
-                <div class="node-badge">
-                  <span class="badge-icon">👨‍🍳</span>
-                  <div class="badge-content">
-                    <span class="badge-name">The Grand Promenade</span>
-                    <span class="badge-stat">55 Hot Buffet Portions • Ready</span>
+              <!-- Node 1: Donor -->
+              <div class="radar-node node-kitchen" style="top: 24%; left: 18%;">
+                <div class="node-ripple-ring"></div>
+                <div class="node-chip">
+                  <span class="chip-avatar">👨‍🍳</span>
+                  <div class="chip-info">
+                    <span class="chip-title">The Grand Promenade</span>
+                    <span class="chip-sub">55 Hot Buffet Servings &bull; Ready</span>
                   </div>
                 </div>
               </div>
 
-              <!-- Animated Connecting Route 1 -->
-              <svg class="canvas-vector-route" viewBox="0 0 460 300">
-                <path d="M 120 75 Q 210 50 240 140 T 360 210" fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="8 6" class="route-line-anim"/>
-                <path d="M 80 220 Q 180 250 240 140" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6 4" class="route-line-anim-reverse"/>
+              <!-- Route SVG -->
+              <svg class="radar-svg-routes" viewBox="0 0 460 300">
+                <path d="M 120 80 Q 210 50 240 145 T 360 215" fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="8 6" class="anim-route-line"/>
+                <path d="M 80 220 Q 180 250 240 145" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6 4" class="anim-route-line-rev"/>
               </svg>
 
-              <!-- Hotspot 2: En Route Insulated Vehicle -->
-              <div class="canvas-node node-vehicle" style="top: 48%; left: 52%;">
-                <div class="vehicle-pill">
-                  <span class="veh-icon">🚐</span>
-                  <div class="veh-details">
-                    <span class="veh-name">Eco-Courier #18 (Thermal Van)</span>
-                    <span class="veh-temp">🌡️ Temp: 65.4°C (Safe Zone)</span>
+              <!-- Node 2: Vehicle -->
+              <div class="radar-node node-courier" style="top: 48%; left: 52%;">
+                <div class="courier-badge">
+                  <span class="c-icon">🚐</span>
+                  <div class="c-info">
+                    <span class="c-name">Eco-Courier #18 (Thermal Van)</span>
+                    <span class="c-temp">🌡️ Temp: 65.4°C (Safe Zone)</span>
                   </div>
-                  <span class="veh-badge">ETA 14m</span>
+                  <span class="c-eta">ETA 12m</span>
                 </div>
               </div>
 
-              <!-- Hotspot 3: Beneficiary Shelter -->
-              <div class="canvas-node node-shelter" style="top: 72%; left: 78%;">
-                <div class="node-ripple ring-amber"></div>
-                <div class="node-badge badge-shelter">
-                  <span class="badge-icon">🏠</span>
-                  <div class="badge-content">
-                    <span class="badge-name">Hope Haven Youth Shelter</span>
-                    <span class="badge-stat">65 Children Awaiting Supper</span>
+              <!-- Node 3: Shelter -->
+              <div class="radar-node node-destination" style="top: 72%; left: 78%;">
+                <div class="node-ripple-ring ring-amber"></div>
+                <div class="node-chip chip-shelter">
+                  <span class="chip-avatar">🏠</span>
+                  <div class="chip-info">
+                    <span class="chip-title">Hope Haven Youth Shelter</span>
+                    <span class="chip-sub">65 Children Awaiting Supper</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Card Telemetry Ticker Bottom -->
-            <div class="mission-footer">
-              <div class="mission-feed-item">
-                <div class="feed-indicator">
-                  <svg class="w-4 h-4 text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-                <div class="feed-body">
-                  <span class="feed-time">Delivered 4 mins ago:</span>
-                  <span class="feed-desc">85 Artisan breads & warm minestrone soup to St. Jude Family Center</span>
-                </div>
-                <span class="feed-verified">Verified</span>
+            <!-- Telemetry Feed Bottom -->
+            <div class="mc-footer">
+              <div class="mc-feed-item">
+                <span class="feed-check">✓</span>
+                <span class="feed-text"><strong>Delivered 3m ago:</strong> 85 Artisan breads & warm soup delivered to St. Jude Family Shelter</span>
+                <span class="feed-verified-tag">Audited</span>
               </div>
             </div>
           </div>
 
-          <!-- Floating Ambient Stat Chips -->
-          <div class="hero-floating-chip chip-co2">
-            <div class="chip-icon-box bg-emerald-dim">🌱</div>
-            <div class="chip-text">
-              <strong class="chip-number">1,225 Tons</strong>
-              <span class="chip-sub">CO2e Emissions Diverted</span>
+          <!-- Ambient Floating Chips -->
+          <div class="floating-stat-chip chip-green-glow">
+            <div class="f-icon-box bg-emerald-dim">🌱</div>
+            <div class="f-text-box">
+              <strong class="f-val">1,225 Tons</strong>
+              <span class="f-lbl">CO2e Emissions Diverted</span>
             </div>
           </div>
 
-          <div class="hero-floating-chip chip-speed">
-            <div class="chip-icon-box bg-amber-dim">⚡</div>
-            <div class="chip-text">
-              <strong class="chip-number">38 Mins</strong>
-              <span class="chip-sub">Average Door-to-Plate Speed</span>
+          <div class="floating-stat-chip chip-amber-glow">
+            <div class="f-icon-box bg-amber-dim">⚡</div>
+            <div class="f-text-box">
+              <strong class="f-val">&lt; 38 Mins</strong>
+              <span class="f-lbl">Average Door-to-Plate</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Verified Partners Banner -->
-      <div class="container hero-partners">
-        <p class="partners-lead">TRUSTED BY ACCLAIMED HOSPITALITY BRANDS & ACCREDITED RELIEF CHARITIES</p>
-        <div class="partners-grid">
-          <div class="partner-card">Marriott Grand Banquets</div>
-          <div class="partner-card">Hyatt Regency Catering</div>
-          <div class="partner-card">Hilton Worldwide Kitchens</div>
-          <div class="partner-card">Feeding Hope Coalition</div>
-          <div class="partner-card">Artisan Bakery Guild</div>
-          <div class="partner-card">Rotary Community Kitchens</div>
+      <!-- Partner Logos Strip -->
+      <div class="container hero-brand-strip">
+        <p class="brand-strip-title">ACCREDITED NETWORK OF HOSPITALITY LEADERS & REGISTERED RELIEF ORGANIZATIONS</p>
+        <div class="brand-pills-row">
+          <div class="brand-pill">Marriott International Banquets</div>
+          <div class="brand-pill">Hyatt Regency Culinary</div>
+          <div class="brand-pill">Hilton Worldwide Kitchens</div>
+          <div class="brand-pill">Feeding Hope Alliance</div>
+          <div class="brand-pill">Artisan Bakers Guild</div>
+          <div class="brand-pill">Rotary Community Kitchens</div>
         </div>
       </div>
     </section>
 
-    <!-- ================= 2. THE PROBLEM (STARK REALITY CONTRAST) ================= -->
+    <!-- ================= 3. THE PROBLEM (STARK REALITY CONTRAST) ================= -->
     <section class="problem-section" id="problem">
       <div class="container">
-        <div class="section-title-wrap text-center">
-          <span class="badge-gradient-red">The Stark Reality</span>
-          <h2 class="section-heading">A Global Tragedy of Mismatched Logistics</h2>
-          <p class="section-subtext">
-            Every day, commercial kitchens discard tons of fresh, pristine food simply because of sudden cancellations and conservative buffet margins. Meanwhile, in the same city blocks, shelters stretch thin broth to feed families.
+        <div class="section-heading-wrap text-center">
+          <span class="pill-badge-red">The Stark Reality</span>
+          <h2 class="section-h2">A Global Tragedy of Mismatched Logistics</h2>
+          <p class="section-lead">
+            Hunger in our cities is not a problem of food scarcity. It is a failure of communication, rapid transit, and food-safe coordination.
           </p>
         </div>
 
-        <div class="problem-split-grid">
-          <!-- Problem Column 1: Food Waste -->
-          <div class="problem-box box-waste">
-            <div class="box-header">
-              <span class="box-tag tag-crimson">The Wastage Catastrophe</span>
-              <span class="box-icon">🗑️</span>
+        <div class="problem-contrast-grid">
+          <!-- Card 1: Wastage -->
+          <div class="contrast-card card-waste">
+            <div class="contrast-header">
+              <span class="contrast-tag tag-crimson">The Wastage Catastrophe</span>
+              <span class="contrast-icon">🗑️</span>
             </div>
-            <div class="box-stat">1.3 Billion Tons</div>
-            <div class="box-sub">Of wholesome edible food discarded every year globally</div>
-            <p class="box-narrative">
-              Over <strong>one-third of all food produced on earth</strong> is dumped into landfills. As it rots anaerobically, it accounts for <strong>8% to 10% of total greenhouse gas emissions</strong> — more than the entire global aviation industry.
+            <div class="contrast-stat">1.3 Billion Tons</div>
+            <div class="contrast-sub">Of wholesome edible food discarded every year</div>
+            <p class="contrast-body">
+              Over <strong>one-third of all food produced on Earth</strong> rots in landfills. As it decomposes, it generates <strong>8% to 10% of total global greenhouse gas emissions</strong> — more than the entire global aviation sector.
             </p>
-
-            <div class="meter-group">
-              <div class="meter-text">
+            <div class="stat-progress-wrap">
+              <div class="prog-labels">
                 <span>Global Production Wasted</span>
                 <span class="text-red-400 font-bold">35.4%</span>
               </div>
-              <div class="meter-track">
-                <div class="meter-fill fill-red" style="width: 35.4%;"></div>
+              <div class="prog-bar-bg">
+                <div class="prog-fill fill-red" style="width: 35.4%;"></div>
               </div>
             </div>
-
-            <div class="problem-points">
-              <div class="point-item">
-                <svg class="point-icon text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            <ul class="contrast-bullets">
+              <li>
+                <svg class="bullet-svg text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                 <span>Buffets and weddings routinely over-cater by 15% to 20%</span>
-              </div>
-              <div class="point-item">
-                <svg class="point-icon text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                <span>High commercial waste disposal fees with zero tax write-offs</span>
-              </div>
-              <div class="point-item">
-                <svg class="point-icon text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              </li>
+              <li>
+                <svg class="bullet-svg text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                <span>Commercial disposal fees cost kitchens thousands per quarter</span>
+              </li>
+              <li>
+                <svg class="bullet-svg text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                 <span>Landfill methane emissions accelerate irreversible climate damage</span>
-              </div>
-            </div>
+              </li>
+            </ul>
           </div>
 
-          <!-- Problem Column 2: Hunger Crisis -->
-          <div class="problem-box box-hunger">
-            <div class="box-header">
-              <span class="box-tag tag-amber">The Human Cost</span>
-              <span class="box-icon">💔</span>
+          <!-- Card 2: Hunger -->
+          <div class="contrast-card card-hunger">
+            <div class="contrast-header">
+              <span class="contrast-tag tag-amber">The Human Cost</span>
+              <span class="contrast-icon">💔</span>
             </div>
-            <div class="box-stat">828 Million People</div>
-            <div class="box-sub">Struggle with daily hunger and severe nutritional poverty</div>
-            <p class="box-narrative">
-              Across metropolitan centers, 1 in 8 families cannot secure two wholesome meals. Local shelters operate on shoestring budgets, unable to afford fleets or drivers to collect surplus food before it spoils.
+            <div class="contrast-stat">828 Million People</div>
+            <div class="contrast-sub">Experience severe chronic hunger every day</div>
+            <p class="contrast-body">
+              1 in 8 urban households struggles to secure two nutritious meals. Grassroots shelters survive on shoestring donations, unable to afford fleets to collect commercial surplus food before it spoils.
             </p>
-
-            <div class="meter-group">
-              <div class="meter-text">
+            <div class="stat-progress-wrap">
+              <div class="prog-labels">
                 <span>Surplus Needed to Eliminate Local Hunger</span>
                 <span class="text-amber-400 font-bold">Only 24.8%</span>
               </div>
-              <div class="meter-track">
-                <div class="meter-fill fill-amber" style="width: 24.8%;"></div>
+              <div class="prog-bar-bg">
+                <div class="prog-fill fill-amber" style="width: 24.8%;"></div>
               </div>
             </div>
-
-            <div class="problem-points">
-              <div class="point-item">
-                <svg class="point-icon text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                <span>Shelters spend over 40% of public donations just purchasing groceries</span>
-              </div>
-              <div class="point-item">
-                <svg class="point-icon text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                <span>Fear of legal liability stops chefs from donating without formal indemnity</span>
-              </div>
-              <div class="point-item">
-                <svg class="point-icon text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <ul class="contrast-bullets">
+              <li>
+                <svg class="bullet-svg text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>Shelters spend over 40% of public funds purchasing basic groceries</span>
+              </li>
+              <li>
+                <svg class="bullet-svg text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>Chefs fear legal liability without structured indemnity guidance</span>
+              </li>
+              <li>
+                <svg class="bullet-svg text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 <span>Children and elderly miss out on protein and wholesome nutrition</span>
-              </div>
-            </div>
+              </li>
+            </ul>
           </div>
         </div>
 
-        <!-- The Solution Bridge Banner -->
-        <div class="problem-verdict-banner">
-          <div class="verdict-icon">⚡</div>
-          <div class="verdict-copy">
-            <h3 class="verdict-title">The Solution is Not Producing More Food — It's Moving It Faster.</h3>
-            <p class="verdict-text">
-              FoodBridge eliminates the friction between commercial kitchens and shelters through automated matching, insulated cold chains, and verified compliance.
+        <!-- The Problem Verdict Callout -->
+        <div class="verdict-banner">
+          <div class="verdict-symbol">⚡</div>
+          <div class="verdict-details">
+            <h3 class="verdict-h3">The Answer is Not Producing More Food — It's Moving It Faster.</h3>
+            <p class="verdict-p">
+              FoodBridge removes friction between commercial kitchens and shelters through sub-90s automated matching, insulated eco-couriers, and verified food safety auditing.
             </p>
           </div>
           <a href="#solution" class="btn btn-emerald btn-lg">Explore How FoodBridge Works &rarr;</a>
@@ -397,110 +390,113 @@
       </div>
     </section>
 
-    <!-- ================= 3. OUR SOLUTION & ARCHITECTURE ================= -->
+    <!-- ================= 4. OUR SOLUTION & ARCHITECTURE ================= -->
     <section class="solution-section" id="solution">
       <div class="container">
-        <div class="section-title-wrap text-center">
-          <span class="badge-gradient-emerald">Our Breakthrough</span>
-          <h2 class="section-heading">The Intelligent Hyperlocal Food Rescue Engine</h2>
-          <p class="section-subtext">
+        <div class="section-heading-wrap text-center">
+          <span class="pill-badge-emerald">The FoodBridge Architecture</span>
+          <h2 class="section-h2">The Intelligent Hyperlocal Food Rescue Engine</h2>
+          <p class="section-lead">
             We built a real-time dispatch ecosystem modeled after modern ridesharing and on-demand cold-chain logistics, re-engineered specifically for perishable food recovery.
           </p>
         </div>
 
-        <!-- 4 Pillars Grid -->
-        <div class="pillars-grid">
-          <div class="pillar-card">
-            <div class="pillar-icon-wrap bg-emerald-dim">
+        <div class="solution-grid">
+          <div class="sol-card">
+            <div class="sol-icon-box bg-emerald-dim">
               <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
             </div>
-            <h3 class="pillar-title">Sub-90s AI Dispatch</h3>
-            <p class="pillar-desc">
-              When a banquet calls out 50 servings, our matching engine analyzes temperature sensitivity, portion volume, and dietary constraints to assign the closest verified shelter in under 90 seconds.
+            <h3 class="sol-title">Sub-90s AI Dispatch</h3>
+            <p class="sol-desc">
+              When a banquet kitchen calls out 50 surplus servings, our algorithm analyzes shelf life, portion volume, and dietary constraints to match the closest verified shelter in under 90 seconds.
             </p>
-            <div class="pillar-tag">⚡ Automated Allocation</div>
+            <span class="sol-tag">⚡ Automated Allocation</span>
           </div>
 
-          <div class="pillar-card">
-            <div class="pillar-icon-wrap bg-blue-dim">
+          <div class="sol-card">
+            <div class="sol-icon-box bg-blue-dim">
               <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
             </div>
-            <h3 class="pillar-title">Active Cold-Chain & Safety</h3>
-            <p class="pillar-desc">
-              Every volunteer courier is equipped with insulated thermal bags and infrared temperature sensors. Hot food stays &gt; 60°C and chilled items stay &lt; 4°C with digital chain-of-custody logging.
+            <h3 class="sol-title">Cold-Chain Temperature Control</h3>
+            <p class="sol-desc">
+              Couriers carry calibrated infrared thermometers and food-grade insulated bags. Hot food must be &gt; 60°C at pickup, and chilled food &lt; 4°C with digital chain-of-custody logging.
             </p>
-            <div class="pillar-tag">🛡️ 100% Quality Inspected</div>
+            <span class="sol-tag">🛡️ 100% Quality Inspected</span>
           </div>
 
-          <div class="pillar-card">
-            <div class="pillar-icon-wrap bg-amber-dim">
+          <div class="sol-card">
+            <div class="sol-icon-box bg-amber-dim">
               <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
             </div>
-            <h3 class="pillar-title">Eco-Courier Network</h3>
-            <p class="pillar-desc">
-              Hyperlocal community heroes on electric cargo bikes, scooters, and eco-vans eliminate transit emissions while navigating dense urban corridors twice as fast as heavy trucks.
+            <h3 class="sol-title">Eco-Courier Network</h3>
+            <p class="sol-desc">
+              Community volunteer drivers and electric cargo bikes navigate dense city corridors twice as fast as heavy freight, eliminating transport emissions while maintaining warm meals.
             </p>
-            <div class="pillar-tag">🛵 Zero-Emission Logistics</div>
+            <span class="sol-tag">🛵 Zero-Emission Logistics</span>
           </div>
 
-          <div class="pillar-card">
-            <div class="pillar-icon-wrap bg-purple-dim">
+          <div class="sol-card">
+            <div class="sol-icon-box bg-purple-dim">
               <svg viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             </div>
-            <h3 class="pillar-title">Certified ESG & Tax Proof</h3>
-            <p class="pillar-desc">
+            <h3 class="sol-title">Certified ESG & Tax Proof</h3>
+            <p class="sol-desc">
               Commercial donors receive automated 80G / 501(c)(3) tax write-off receipts along with EPA WARM model certified Scope 3 emissions reduction data for corporate sustainability reports.
             </p>
-            <div class="pillar-tag">📊 Automated Tax Receipts</div>
+            <span class="sol-tag">📊 Automated Tax Receipts</span>
           </div>
         </div>
 
-        <!-- Ecosystem Flow Diagram -->
-        <div class="ecosystem-box">
-          <div class="eco-stage">
-            <div class="eco-avatar bg-donor">👨‍🍳</div>
-            <div class="eco-title">Commercial Kitchen</div>
-            <div class="eco-desc">Hotels, bistros, weddings & cafeterias pledge surplus in 60s</div>
+        <!-- Ecosystem Architecture Diagram -->
+        <div class="eco-diagram-card">
+          <div class="eco-node-item">
+            <div class="eco-circle-avatar bg-donor-avatar">👨‍🍳</div>
+            <h4 class="eco-node-title">Commercial Donors</h4>
+            <p class="eco-node-sub">Hotels, bistros, weddings & cafeterias log surplus in 60s</p>
           </div>
-          <div class="eco-flow-arrow">
-            <span class="flow-text">&lt; 90s Match</span>
-            <div class="flow-line"></div>
+
+          <div class="eco-connector-flow">
+            <span class="connector-pill">&lt; 90s Match</span>
+            <div class="connector-dashed-line"></div>
           </div>
-          <div class="eco-stage">
-            <div class="eco-avatar bg-hub">🌉</div>
-            <div class="eco-title">FoodBridge Cloud Engine</div>
-            <div class="eco-desc">Route optimization, temperature logging & courier dispatch</div>
+
+          <div class="eco-node-item">
+            <div class="eco-circle-avatar bg-hub-avatar">🌉</div>
+            <h4 class="eco-node-title">FoodBridge Cloud Engine</h4>
+            <p class="eco-node-sub">Real-time route optimization, temperature sensor logging & courier dispatch</p>
           </div>
-          <div class="eco-flow-arrow">
-            <span class="flow-text">&lt; 38 min Delivery</span>
-            <div class="flow-line"></div>
+
+          <div class="eco-connector-flow">
+            <span class="connector-pill">&lt; 38 min Delivery</span>
+            <div class="connector-dashed-line"></div>
           </div>
-          <div class="eco-stage">
-            <div class="eco-avatar bg-ngo">🤝</div>
-            <div class="eco-title">Verified NGO Shelters</div>
-            <div class="eco-desc">Wholesome hot meals served with dignity to children and families</div>
+
+          <div class="eco-node-item">
+            <div class="eco-circle-avatar bg-ngo-avatar">🤝</div>
+            <h4 class="eco-node-title">Verified NGO Shelters</h4>
+            <p class="eco-node-sub">Wholesome hot meals served with dignity to children and families</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= 4. HOW IT WORKS (INTERACTIVE STEP SIMULATOR) ================= -->
+    <!-- ================= 5. HOW IT WORKS (WITH INTERACTIVE PREVIEW) ================= -->
     <section class="how-section" id="how-it-works">
       <div class="container">
-        <div class="section-title-wrap text-center">
-          <span class="badge-gradient-emerald">Simple 4-Step Process</span>
-          <h2 class="section-heading">Donating Food is as Effortless as Ordering Delivery</h2>
-          <p class="section-subtext">
-            Designed for busy executive chefs, banquet managers, and volunteer directors who don't have time for complicated paperwork.
+        <div class="section-heading-wrap text-center">
+          <span class="pill-badge-emerald">Frictionless Experience</span>
+          <h2 class="section-h2">Donating Food is as Simple as Ordering Delivery</h2>
+          <p class="section-lead">
+            Designed for busy executive chefs, banquet staff, and shelter coordinators who don't have time for complicated paperwork.
           </p>
 
-          <!-- Interactive Persona Tabs -->
-          <div class="step-persona-tabs" role="tablist">
-            <button class="tab-btn active" id="tabBtnDonor" role="tab" aria-selected="true" data-tab="donor">
+          <!-- Audience Tabs -->
+          <div class="persona-tab-group" role="tablist">
+            <button class="persona-tab active" id="tabDonorBtn" role="tab" aria-selected="true" data-tab="donor">
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
               <span>For Food Donors (Kitchens & Banquets)</span>
             </button>
-            <button class="tab-btn" id="tabBtnNgo" role="tab" aria-selected="false" data-tab="ngo">
+            <button class="persona-tab" id="tabNgoBtn" role="tab" aria-selected="false" data-tab="ngo">
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
               <span>For Registered Shelters & NGOs</span>
             </button>
@@ -508,99 +504,174 @@
         </div>
 
         <!-- Donor Step Panels -->
-        <div class="step-panels-wrap" id="donorPanels">
-          <div class="step-cards-grid">
-            <div class="step-box">
-              <div class="step-num">01</div>
-              <div class="step-icon">📱</div>
-              <h4 class="step-title">Log Surplus in 60s</h4>
-              <p class="step-desc">Open the app or web portal. Select meal category (hot cooked dishes, bakery, raw produce), estimated portions, and pickup window.</p>
-              <div class="step-tag">Zero tedious paperwork</div>
+        <div class="step-panels-container" id="donorPanels">
+          <div class="step-quad-grid">
+            <div class="step-card">
+              <span class="step-digit">01</span>
+              <div class="step-symbol">📱</div>
+              <h4 class="step-name">Log Surplus in 60s</h4>
+              <p class="step-text">Open the app or web portal. Select meal category (hot cooked dishes, bakery, raw produce), estimated portions, and pickup window.</p>
+              <span class="step-pill-tag">Zero tedious paperwork</span>
             </div>
 
-            <div class="step-box">
-              <div class="step-num">02</div>
-              <div class="step-icon">🤖</div>
-              <h4 class="step-title">Instant AI Match</h4>
-              <p class="step-desc">Our algorithm matches your donation with nearby shelters based on daily capacity, food temperature profile, and dietary criteria.</p>
-              <div class="step-tag">Matched in &lt; 90 seconds</div>
+            <div class="step-card">
+              <span class="step-digit">02</span>
+              <div class="step-symbol">🤖</div>
+              <h4 class="step-name">Instant AI Match</h4>
+              <p class="step-text">Our algorithm matches your donation with nearby shelters based on daily capacity, food temperature profile, and dietary criteria.</p>
+              <span class="step-pill-tag">Matched in &lt; 90 seconds</span>
             </div>
 
-            <div class="step-box">
-              <div class="step-num">03</div>
-              <div class="step-icon">🛵</div>
-              <h4 class="step-title">Contactless Pickup</h4>
-              <p class="step-desc">Our certified courier arrives with insulated thermal boxes. A quick infrared temperature check, sealed QR scan, and they are off.</p>
-              <div class="step-tag">In-and-out in 4 minutes</div>
+            <div class="step-card">
+              <span class="step-digit">03</span>
+              <div class="step-symbol">🛵</div>
+              <h4 class="step-name">Contactless Pickup</h4>
+              <p class="step-text">Our certified courier arrives with insulated thermal boxes. A quick infrared temperature check, sealed QR scan, and they are off.</p>
+              <span class="step-pill-tag">In-and-out in 4 minutes</span>
             </div>
 
-            <div class="step-box">
-              <div class="step-num">04</div>
-              <div class="step-icon">🎖️</div>
-              <h4 class="step-title">Instant ESG & Tax Proof</h4>
-              <p class="step-desc">Receive real-time delivery confirmation photos, verified beneficiary receipts, and automated 80G/501(c)(3) tax write-offs.</p>
-              <div class="step-tag">Audit-ready documentation</div>
+            <div class="step-card">
+              <span class="step-digit">04</span>
+              <div class="step-symbol">🎖️</div>
+              <h4 class="step-name">Instant ESG & Tax Proof</h4>
+              <p class="step-text">Receive real-time delivery confirmation photos, verified beneficiary receipts, and automated 80G/501(c)(3) tax write-offs.</p>
+              <span class="step-pill-tag">Audit-ready documentation</span>
             </div>
           </div>
         </div>
 
         <!-- NGO Step Panels (Hidden by default) -->
-        <div class="step-panels-wrap hidden" id="ngoPanels">
-          <div class="step-cards-grid">
-            <div class="step-box">
-              <div class="step-num">01</div>
-              <div class="step-icon">📋</div>
-              <h4 class="step-title">Fast Vetting Onboarding</h4>
-              <p class="step-desc">Register your shelter or community kitchen with non-profit registration and health certifications. Approved in 24 hours.</p>
-              <div class="step-tag">100% Free food access</div>
+        <div class="step-panels-container hidden" id="ngoPanels">
+          <div class="step-quad-grid">
+            <div class="step-card">
+              <span class="step-digit">01</span>
+              <div class="step-symbol">📋</div>
+              <h4 class="step-name">Fast Vetting Onboarding</h4>
+              <p class="step-text">Register your shelter or community kitchen with non-profit registration and health certifications. Approved in 24 hours.</p>
+              <span class="step-pill-tag">100% Free food access</span>
             </div>
 
-            <div class="step-box">
-              <div class="step-num">02</div>
-              <div class="step-icon">🔔</div>
-              <h4 class="step-title">Real-Time Surplus Alerts</h4>
-              <p class="step-desc">Receive instant pings when donor kitchens in your neighborhood have hot, wholesome meals ready for your beneficiary count.</p>
-              <div class="step-tag">1-Tap acceptance</div>
+            <div class="step-card">
+              <span class="step-digit">02</span>
+              <div class="step-symbol">🔔</div>
+              <h4 class="step-name">Real-Time Surplus Alerts</h4>
+              <p class="step-text">Receive instant pings when donor kitchens in your neighborhood have hot, wholesome meals ready for your beneficiary count.</p>
+              <span class="step-pill-tag">1-Tap acceptance</span>
             </div>
 
-            <div class="step-box">
-              <div class="step-num">03</div>
-              <div class="step-icon">🍲</div>
-              <h4 class="step-title">Doorstep Thermal Delivery</h4>
-              <p class="step-desc">Our eco-couriers deliver hot meals in thermal carriers directly to your kitchen door, with food safety audit verification.</p>
-              <div class="step-tag">Hot & fresh arrival</div>
+            <div class="step-card">
+              <span class="step-digit">03</span>
+              <div class="step-symbol">🍲</div>
+              <h4 class="step-name">Doorstep Thermal Delivery</h4>
+              <p class="step-text">Our eco-couriers deliver hot meals in thermal carriers directly to your kitchen door, with food safety audit verification.</p>
+              <span class="step-pill-tag">Hot & fresh arrival</span>
             </div>
 
-            <div class="step-box">
-              <div class="step-num">04</div>
-              <div class="step-icon">💛</div>
-              <h4 class="step-title">Dignified Nourishment</h4>
-              <p class="step-desc">Serve delicious, gourmet-grade nutrition to residents, redirecting your saved grocery funds to schooling and shelter medical care.</p>
-              <div class="step-tag">Dignified dining</div>
+            <div class="step-card">
+              <span class="step-digit">04</span>
+              <div class="step-symbol">💛</div>
+              <h4 class="step-name">Dignified Nourishment</h4>
+              <p class="step-text">Serve delicious, gourmet-grade nutrition to residents, redirecting your saved grocery funds to schooling and shelter medical care.</p>
+              <span class="step-pill-tag">Dignified dining</span>
             </div>
           </div>
         </div>
 
         <div class="text-center mt-12">
-          <button class="btn btn-emerald btn-lg" onclick="openModal('donateModal')">
+          <button class="btn btn-emerald btn-lg shadow-emerald-glow" onclick="openModal('donateModal')">
             Schedule Your Kitchen's First Pickup &rarr;
           </button>
         </div>
       </div>
     </section>
 
-    <!-- ================= 5. INTERACTIVE LIVE COVERAGE CHECKER ================= -->
+    <!-- ================= 6. INTERACTIVE BEFORE & AFTER COMPARISON (NEW) ================= -->
+    <section class="comparison-section" id="comparison">
+      <div class="container">
+        <div class="section-heading-wrap text-center">
+          <span class="pill-badge-amber">Direct Impact Contrast</span>
+          <h2 class="section-h2">See the Tangible Difference FoodBridge Makes</h2>
+          <p class="section-lead">
+            Toggle between the traditional reality and the FoodBridge solution to see how commercial kitchens convert liability into community empowerment.
+          </p>
+
+          <!-- Interactive Toggle Buttons -->
+          <div class="comparison-toggle-bar">
+            <button class="comp-toggle-btn active" id="btnShowWithout">Without FoodBridge (The Old Way)</button>
+            <button class="comp-toggle-btn" id="btnShowWith">With FoodBridge (The New Way)</button>
+          </div>
+        </div>
+
+        <div class="comparison-container" id="comparisonView">
+          <!-- View 1: Without FoodBridge -->
+          <div class="comp-panel panel-without active" id="panelWithout">
+            <div class="comp-side-badge tag-red-solid">❌ The Old Reality: Waste & Liability</div>
+            <div class="comp-metrics-row">
+              <div class="comp-metric-card">
+                <span class="cm-icon">🗑️</span>
+                <strong class="cm-val text-red-400">100% Landfill Waste</strong>
+                <span class="cm-lbl">Prime cooked buffet food dumped in garbage bins</span>
+              </div>
+              <div class="comp-metric-card">
+                <span class="cm-icon">💸</span>
+                <strong class="cm-val text-red-400">+$1,450 / Month</strong>
+                <span class="cm-lbl">Commercial tipping fees paid to waste management</span>
+              </div>
+              <div class="comp-metric-card">
+                <span class="cm-icon">🏭</span>
+                <strong class="cm-val text-red-400">625 kg Methane/CO2</strong>
+                <span class="cm-lbl">Decomposes anaerobically in landfills, warming climate</span>
+              </div>
+              <div class="comp-metric-card">
+                <span class="cm-icon">💔</span>
+                <strong class="cm-val text-red-400">0 Meals Rescued</strong>
+                <span class="cm-lbl">Local shelters go without dinner just 2 miles away</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- View 2: With FoodBridge -->
+          <div class="comp-panel panel-with hidden" id="panelWith">
+            <div class="comp-side-badge tag-emerald-solid">✅ The FoodBridge Reality: Nourishment & ESG Value</div>
+            <div class="comp-metrics-row">
+              <div class="comp-metric-card">
+                <span class="cm-icon">🍲</span>
+                <strong class="cm-val text-emerald-400">500 Nutritious Meals</strong>
+                <span class="cm-lbl">Warm, wholesome gourmet meals delivered with dignity</span>
+              </div>
+              <div class="comp-metric-card">
+                <span class="cm-icon">🧾</span>
+                <strong class="cm-val text-emerald-400">$1,500 Tax Deduction</strong>
+                <span class="cm-lbl">Automated 80G / 501(c)(3) verified charitable receipts</span>
+              </div>
+              <div class="comp-metric-card">
+                <span class="cm-icon">🌱</span>
+                <strong class="cm-val text-emerald-400">625 kg CO2e Diverted</strong>
+                <span class="cm-lbl">EPA WARM model Scope 3 corporate ESG credentials</span>
+              </div>
+              <div class="comp-metric-card">
+                <span class="cm-icon">⚡</span>
+                <strong class="cm-val text-emerald-400">&lt; 38 Min Pickup</strong>
+                <span class="cm-lbl">Insulated thermal courier handles pickup seamlessly</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 7. INTERACTIVE COVERAGE CHECKER ================= -->
     <section class="coverage-section" id="coverage">
       <div class="container">
         <div class="coverage-card">
-          <div class="coverage-content">
-            <span class="badge-gradient-emerald">Hyperlocal Dispatch Map</span>
-            <h3 class="coverage-title">Check Food Rescue Coverage in Your Area</h3>
+          <div class="coverage-inner">
+            <span class="pill-badge-emerald">Hyperlocal Dispatch Map</span>
+            <h3 class="coverage-h3">Check Food Rescue Coverage in Your Area</h3>
             <p class="coverage-sub">
-              Enter your restaurant or establishment address to see how many verified shelters and active rescue drivers are within your 5-mile radius.
+              Enter your restaurant, hotel, or kitchen address to see verified shelters and active rescue drivers within your 5-mile radius.
             </p>
 
-            <form class="coverage-form" id="coverageForm" onsubmit="checkCoverage(event)">
+            <form class="coverage-search-form" id="coverageForm" onsubmit="checkCoverage(event)">
               <div class="input-with-icon">
                 <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 <input type="text" id="coverageInput" placeholder="Enter City, Neighborhood, or ZIP Code (e.g. Brooklyn, NY)" required>
@@ -608,11 +679,11 @@
               <button type="submit" class="btn btn-emerald">Check Coverage</button>
             </form>
 
-            <div class="coverage-result hidden" id="coverageResult">
-              <div class="res-status-dot"></div>
-              <div class="res-info">
+            <div class="coverage-alert-box hidden" id="coverageResult">
+              <div class="alert-status-dot"></div>
+              <div class="alert-info-text">
                 <strong>🟢 High Coverage Active in <span id="resCityName">New York Metro</span>!</strong>
-                <span>18 Verified Shelters &bull; 24 Active Couriers &bull; Avg Dispatch Time: <strong>32 Minutes</strong></span>
+                <span>18 Verified Shelters &bull; 24 Active Couriers &bull; Average Dispatch Time: <strong>32 Minutes</strong></span>
               </div>
             </div>
           </div>
@@ -620,26 +691,26 @@
       </div>
     </section>
 
-    <!-- ================= 6. KEY PLATFORM CAPABILITIES (BENTO GRID) ================= -->
+    <!-- ================= 8. KEY CAPABILITIES (BENTO GRID) ================= -->
     <section class="features-section" id="features">
       <div class="container">
-        <div class="section-title-wrap text-center">
-          <span class="badge-gradient-emerald">Platform Capabilities</span>
-          <h2 class="section-heading">Engineered for Safety, Speed & Scale</h2>
-          <p class="section-subtext">
-            From smart portion calculators to cold-chain sensor monitoring, every feature is built to guarantee safety and eliminate operational headaches.
+        <div class="section-heading-wrap text-center">
+          <span class="pill-badge-emerald">Platform Capabilities</span>
+          <h2 class="section-h2">Engineered for Safety, Speed & Scale</h2>
+          <p class="section-lead">
+            From portion estimators to cold-chain sensor monitoring, every feature is built to guarantee safety and eliminate operational headaches.
           </p>
         </div>
 
         <div class="bento-grid">
           <!-- Bento 1 (Large) -->
-          <div class="bento-box bento-large">
-            <div class="bento-badge">Core Engine</div>
-            <h3 class="bento-title">Smart Surplus Donation Flow</h3>
-            <p class="bento-body">
+          <div class="bento-box bento-span-2">
+            <div class="bento-pill">Core Dispatch Engine</div>
+            <h3 class="bento-h3">Smart Surplus Donation Flow</h3>
+            <p class="bento-p">
               Designed specifically for peak kitchen rush hours. Executive chefs or banquet staff can log 100 surplus servings in under 60 seconds using photo portion estimators and automated allergy tagging.
             </p>
-            <div class="bento-stats-row">
+            <div class="bento-stat-trio">
               <div class="b-stat"><strong>&lt; 60s</strong><span>Pledge Time</span></div>
               <div class="b-stat"><strong>99.4%</strong><span>Match Success</span></div>
               <div class="b-stat"><strong>0</strong><span>Paperwork</span></div>
@@ -648,12 +719,12 @@
 
           <!-- Bento 2 -->
           <div class="bento-box">
-            <div class="bento-badge">Protection</div>
-            <h3 class="bento-title">Good Samaritan Shield</h3>
-            <p class="bento-body">
+            <div class="bento-pill">Protection</div>
+            <h3 class="bento-h3">Good Samaritan Shield</h3>
+            <p class="bento-p">
               Full legal protection under the Bill Emerson Good Samaritan Food Donation Act. Complete civil and criminal liability indemnity for honest donors.
             </p>
-            <ul class="bento-list">
+            <ul class="bento-bullets">
               <li>Automatic liability waivers</li>
               <li>FSSAI & FDA compliance guidelines</li>
             </ul>
@@ -661,12 +732,12 @@
 
           <!-- Bento 3 -->
           <div class="bento-box">
-            <div class="bento-badge">Vetting</div>
-            <h3 class="bento-title">Accredited NGO Network</h3>
-            <p class="bento-body">
+            <div class="bento-pill">Vetting</div>
+            <h3 class="bento-h3">Accredited NGO Network</h3>
+            <p class="bento-p">
               Every shelter is verified in person with strict kitchen hygiene, refrigeration capacity, and transparent daily beneficiary audits.
             </p>
-            <ul class="bento-list">
+            <ul class="bento-bullets">
               <li>Capacity demand forecasting</li>
               <li>Dietary restriction matching</li>
             </ul>
@@ -674,25 +745,25 @@
 
           <!-- Bento 4 -->
           <div class="bento-box">
-            <div class="bento-badge">Transit</div>
-            <h3 class="bento-title">Cold-Chain Telemetry</h3>
-            <p class="bento-body">
+            <div class="bento-pill">Transit</div>
+            <h3 class="bento-h3">Cold-Chain Telemetry</h3>
+            <p class="bento-p">
               Infrared digital temperature logging at pickup and handoff guarantees hot meals stay warm and cold items stay refrigerated throughout transit.
             </p>
-            <ul class="bento-list">
+            <ul class="bento-bullets">
               <li>Tamper-evident seals</li>
               <li>Real-time sensor logs</li>
             </ul>
           </div>
 
           <!-- Bento 5 (Large) -->
-          <div class="bento-box bento-large">
-            <div class="bento-badge">Corporate ESG</div>
-            <h3 class="bento-title">Audit-Ready Carbon & CSR Reporting</h3>
-            <p class="bento-body">
+          <div class="bento-box bento-span-2">
+            <div class="bento-pill">Corporate ESG</div>
+            <h3 class="bento-h3">Audit-Ready Carbon & CSR Reporting</h3>
+            <p class="bento-p">
               Turn food waste reduction into certified Scope 3 ESG credentials. Export EPA WARM model certified carbon offset metrics and one-click 80G / 501(c)(3) tax deductions for your CFO.
             </p>
-            <div class="bento-stats-row">
+            <div class="bento-stat-trio">
               <div class="b-stat"><strong>100%</strong><span>Tax Deductible</span></div>
               <div class="b-stat"><strong>Scope 3</strong><span>Emissions Offset</span></div>
               <div class="b-stat"><strong>Monthly</strong><span>PDF Audit Exports</span></div>
@@ -702,248 +773,266 @@
       </div>
     </section>
 
-    <!-- ================= 7. DYNAMIC IMPACT CALCULATOR & CERTIFICATE ================= -->
-    <section class="calculator-section" id="impact">
+    <!-- ================= 9. DYNAMIC IMPACT CALCULATOR & CERTIFICATE ================= -->
+    <section class="calculator-section" id="calculator">
       <div class="container">
-        <div class="section-title-wrap text-center">
-          <span class="badge-gradient-amber">Interactive Impact Simulator</span>
-          <h2 class="section-heading">Calculate Your Kitchen's Potential</h2>
-          <p class="section-subtext">
+        <div class="section-heading-wrap text-center">
+          <span class="pill-badge-amber">Interactive Impact Simulator</span>
+          <h2 class="section-h2">Calculate Your Kitchen's Potential</h2>
+          <p class="section-lead">
             See the transformative difference your monthly food surplus can make for local families and climate resilience.
           </p>
         </div>
 
-        <div class="calc-wrapper">
-          <div class="calc-interface">
+        <div class="calc-panel-card">
+          <div class="calc-grid-layout">
             <!-- Left Controls -->
-            <div class="calc-left">
-              <div class="facility-type-group">
-                <label for="calcFacilityType" class="field-label">Your Kitchen / Facility Type:</label>
-                <select id="calcFacilityType" class="calc-select">
+            <div class="calc-controls-col">
+              <div class="calc-form-group">
+                <label for="calcFacilityType" class="calc-label">Your Kitchen / Facility Type:</label>
+                <select id="calcFacilityType" class="calc-select-input">
                   <option value="hotel" selected>Hotel Buffet & Banquet Halls</option>
                   <option value="restaurant">Bistro / Full-Service Restaurant</option>
                   <option value="wedding">Wedding & Event Caterer</option>
                   <option value="corporate">Corporate Office Cafeteria</option>
                   <option value="bakery">Artisan Bakery & Patisserie</option>
-                  <option value="residential">Residential Community / Housing Society</option>
+                  <option value="residential">Residential Community / Society</option>
                 </select>
               </div>
 
-              <div class="slider-box">
-                <div class="slider-labels">
-                  <span class="slider-title">Estimated Monthly Surplus:</span>
-                  <span class="slider-display"><strong id="calcWeightNumber">250</strong> kg / month</span>
+              <div class="calc-slider-group">
+                <div class="slider-val-header">
+                  <span class="sv-title">Estimated Monthly Surplus:</span>
+                  <span class="sv-display"><strong id="calcWeightNumber">250</strong> kg / month</span>
                 </div>
-                <input type="range" id="calcSlider" min="25" max="2500" step="25" value="250" class="styled-slider" aria-label="Surplus food weight slider">
-                <div class="slider-minmax">
+                <input type="range" id="calcSlider" min="25" max="2500" step="25" value="250" class="neon-range-slider" aria-label="Surplus weight slider">
+                <div class="slider-boundary-hints">
                   <span>Small Cafe (25 kg)</span>
                   <span>Mid Hotel (250 kg)</span>
                   <span>Convention Center (2,500 kg)</span>
                 </div>
               </div>
 
-              <!-- Quick Presets -->
-              <div class="presets-row">
-                <span class="presets-label">Quick Presets:</span>
-                <button type="button" class="preset-pill" data-kg="75">Bistro (75 kg)</button>
-                <button type="button" class="preset-pill active" data-kg="250">Hotel (250 kg)</button>
-                <button type="button" class="preset-pill" data-kg="600">Banquet (600 kg)</button>
-                <button type="button" class="preset-pill" data-kg="1500">Convention (1,500 kg)</button>
+              <!-- Presets -->
+              <div class="presets-pill-group">
+                <span class="presets-title-lbl">Quick Presets:</span>
+                <button type="button" class="preset-btn" data-kg="75">Bistro (75 kg)</button>
+                <button type="button" class="preset-btn active" data-kg="250">Hotel (250 kg)</button>
+                <button type="button" class="preset-btn" data-kg="600">Banquet (600 kg)</button>
+                <button type="button" class="preset-btn" data-kg="1500">Convention (1,500 kg)</button>
               </div>
 
-              <div class="calc-note">
+              <div class="calc-disclaimer-box">
                 <svg class="w-4 h-4 text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                 <span>Metrics derived from UN FAO & US EPA Waste Reduction Model (WARM). 1 kg cooked surplus ≈ 2 nutritious balanced meals.</span>
               </div>
             </div>
 
             <!-- Right Results -->
-            <div class="calc-right">
-              <div class="calc-results-grid">
-                <div class="res-card card-highlight">
-                  <div class="rc-icon">🍽️</div>
-                  <div class="rc-body">
-                    <div class="rc-value" id="calcMealsResult">500</div>
-                    <div class="rc-title">Nutritious Meals Rescued</div>
-                    <div class="rc-sub">Provided directly to local shelter residents</div>
+            <div class="calc-results-col">
+              <div class="res-cards-stack">
+                <div class="res-card-item card-heroic">
+                  <div class="rci-icon">🍽️</div>
+                  <div class="rci-data">
+                    <div class="rci-number" id="calcMealsResult">500</div>
+                    <div class="rci-title">Nutritious Meals Rescued</div>
+                    <div class="rci-sub">Provided directly to local shelter residents</div>
                   </div>
                 </div>
 
-                <div class="res-card">
-                  <div class="rc-icon">🌱</div>
-                  <div class="rc-body">
-                    <div class="rc-value" id="calcCo2Result">625 kg</div>
-                    <div class="rc-title">CO2e Emissions Prevented</div>
-                    <div class="rc-sub">Equal to taking <span id="calcCarsResult">2.8</span> cars off road for a month</div>
+                <div class="res-card-item">
+                  <div class="rci-icon">🌱</div>
+                  <div class="rci-data">
+                    <div class="rci-number" id="calcCo2Result">625 kg</div>
+                    <div class="rci-title">CO2e Emissions Prevented</div>
+                    <div class="rci-sub">Equal to taking <span id="calcCarsResult">2.8</span> cars off road for a month</div>
                   </div>
                 </div>
 
-                <div class="res-card">
-                  <div class="rc-icon">💧</div>
-                  <div class="rc-body">
-                    <div class="rc-value" id="calcWaterResult">125,000 L</div>
-                    <div class="rc-title">Embedded Water Conserved</div>
-                    <div class="rc-sub">Saved through avoided agricultural loss</div>
+                <div class="res-card-item">
+                  <div class="rci-icon">💧</div>
+                  <div class="rci-data">
+                    <div class="rci-number" id="calcWaterResult">125,000 L</div>
+                    <div class="rci-title">Embedded Water Conserved</div>
+                    <div class="rci-sub">Saved through avoided agricultural loss</div>
                   </div>
                 </div>
 
-                <div class="res-card">
-                  <div class="rc-icon">🧾</div>
-                  <div class="rc-body">
-                    <div class="rc-value" id="calcTaxResult">$1,500</div>
-                    <div class="rc-title">Estimated Tax Write-Off</div>
-                    <div class="rc-sub">Eligible charitable deduction for your business</div>
+                <div class="res-card-item">
+                  <div class="rci-icon">🧾</div>
+                  <div class="rci-data">
+                    <div class="rci-number" id="calcTaxResult">$1,500</div>
+                    <div class="rci-title">Estimated Tax Write-Off</div>
+                    <div class="rci-sub">Eligible charitable deduction for your business</div>
                   </div>
                 </div>
               </div>
 
-              <button class="btn btn-emerald btn-lg w-full mt-4" id="pledgeSurplusBtn">
-                Pledge This Surplus & Dispatch Courier &rarr;
-              </button>
+              <div class="calc-btn-group mt-4">
+                <button class="btn btn-emerald btn-lg w-full shadow-emerald-glow" id="pledgeSurplusBtn">
+                  Pledge This Surplus & Dispatch Courier &rarr;
+                </button>
+                <button class="btn btn-ghost w-full" id="openCertificateBtn">
+                  📜 Preview Official ESG Impact Certificate
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- UN SDGs Strip -->
-        <div class="sdg-container">
-          <span class="sdg-title">PROUDLY ADVANCING UNITED NATIONS SUSTAINABLE DEVELOPMENT GOALS:</span>
-          <div class="sdg-grid">
-            <div class="sdg-chip chip-sdg2"><strong>SDG 2</strong> Zero Hunger</div>
-            <div class="sdg-chip chip-sdg11"><strong>SDG 11</strong> Sustainable Cities</div>
-            <div class="sdg-chip chip-sdg12"><strong>SDG 12</strong> Responsible Consumption</div>
-            <div class="sdg-chip chip-sdg13"><strong>SDG 13</strong> Climate Action</div>
+        <div class="sdg-badges-container">
+          <span class="sdg-label-lead">PROUDLY ADVANCING UNITED NATIONS SUSTAINABLE DEVELOPMENT GOALS:</span>
+          <div class="sdg-pills-row">
+            <div class="sdg-pill sdg-2"><strong>SDG 2</strong> Zero Hunger</div>
+            <div class="sdg-pill sdg-11"><strong>SDG 11</strong> Sustainable Cities</div>
+            <div class="sdg-pill sdg-12"><strong>SDG 12</strong> Responsible Consumption</div>
+            <div class="sdg-pill sdg-13"><strong>SDG 13</strong> Climate Action</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= 8. VOICES OF CHANGE (COMMUNITY STORIES) ================= -->
+    <!-- ================= 10. COMMUNITY STORIES & TESTIMONIALS ================= -->
     <section class="stories-section" id="stories">
       <div class="container">
-        <div class="section-title-wrap text-center">
-          <span class="badge-gradient-emerald">Human Stories Across the Bridge</span>
-          <h2 class="section-heading">Real People. Real Impact.</h2>
-          <p class="section-subtext">
+        <div class="section-heading-wrap text-center">
+          <span class="pill-badge-emerald">Human Stories Across the Bridge</span>
+          <h2 class="section-h2">Real People. Real Impact.</h2>
+          <p class="section-lead">
             Behind every rescued plate is an executive chef who refuses to waste food, a courier who pedals in the rain, and a family experiencing dignity.
           </p>
 
-          <!-- Filter Pills -->
-          <div class="story-filters">
-            <button class="filter-pill active" data-filter="all">All Perspectives</button>
-            <button class="filter-pill" data-filter="donor">Executive Chefs</button>
-            <button class="filter-pill" data-filter="ngo">Shelter Directors</button>
-            <button class="filter-pill" data-filter="volunteer">Rescue Couriers</button>
+          <div class="story-category-tabs">
+            <button class="cat-pill active" data-filter="all">All Perspectives</button>
+            <button class="cat-pill" data-filter="donor">Executive Chefs</button>
+            <button class="cat-pill" data-filter="ngo">Shelter Directors</button>
+            <button class="cat-pill" data-filter="volunteer">Rescue Couriers</button>
           </div>
         </div>
 
         <div class="stories-cards-grid">
           <!-- Story 1 -->
-          <div class="story-card" data-category="donor">
-            <div class="sc-header">
-              <div class="sc-avatar bg-emerald-dim">👨‍🍳</div>
-              <div class="sc-meta">
-                <h4 class="sc-author">Chef Marco Rossi</h4>
-                <p class="sc-role">Executive Chef &bull; The Grand Promenade Hotel</p>
-                <div class="sc-rating">★★★★★ <span class="badge-verified">Verified Donor</span></div>
+          <div class="story-bubble-card" data-category="donor">
+            <div class="sbc-header">
+              <div class="sbc-avatar bg-emerald-dim">👨‍🍳</div>
+              <div class="sbc-author-meta">
+                <h4 class="sbc-name">Chef Marco Rossi</h4>
+                <p class="sbc-role">Executive Chef &bull; The Grand Promenade Hotel</p>
+                <div class="sbc-rating">★★★★★ <span class="badge-verified">Verified Donor</span></div>
               </div>
             </div>
-            <p class="sc-quote">
+            <p class="sbc-text">
               "In luxury banqueting, throwing away 40 kg of pristine saffron risotto and roast tenderloin broke my heart every midnight. With FoodBridge, in under 20 minutes a courier arrives with temperature-monitored carriers. Knowing 80 children at Hope Haven get a five-star warm supper instead of our dumpsters is the single proudest achievement of my culinary career."
             </p>
-            <div class="sc-footer">
-              <span class="sc-badge">🍲 4,200+ Meals Donated</span>
-              <span class="sc-time">Partner since 2024</span>
+            <div class="sbc-audio-pill">
+              <span class="audio-play-icon">▶</span>
+              <span class="audio-label">Listen to Chef Marco's 30s Audio Note</span>
+              <div class="audio-waves">
+                <span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+            <div class="sbc-footer">
+              <span class="sbc-badge">🍲 4,200+ Meals Donated</span>
+              <span class="sbc-time">Partner since 2024</span>
             </div>
           </div>
 
           <!-- Story 2 -->
-          <div class="story-card" data-category="ngo">
-            <div class="sc-header">
-              <div class="sc-avatar bg-amber-dim">👩‍💼</div>
-              <div class="sc-meta">
-                <h4 class="sc-author">Anita Sharma</h4>
-                <p class="sc-role">Executive Director &bull; Sneha Deep Youth Shelter</p>
-                <div class="sc-rating">★★★★★ <span class="badge-verified">Verified Shelter</span></div>
+          <div class="story-bubble-card" data-category="ngo">
+            <div class="sbc-header">
+              <div class="sbc-avatar bg-amber-dim">👩‍💼</div>
+              <div class="sbc-author-meta">
+                <h4 class="sbc-name">Anita Sharma</h4>
+                <p class="sbc-role">Executive Director &bull; Sneha Deep Youth Shelter</p>
+                <div class="sbc-rating">★★★★★ <span class="badge-verified">Verified Shelter</span></div>
               </div>
             </div>
-            <p class="sc-quote">
+            <p class="sbc-text">
               "We used to spend 45% of our donor funds just buying groceries. Now, FoodBridge delivers steaming hot, gourmet-grade nutrition every single evening. The food arrives with digital temperature verification, and our children love the meals. The money we saved has funded after-school robotics and literacy tutoring for all 120 of our kids."
             </p>
-            <div class="sc-footer">
-              <span class="sc-badge">🏠 120 Children Fed Daily</span>
-              <span class="sc-time">Daily Beneficiary</span>
+            <div class="sbc-audio-pill">
+              <span class="audio-play-icon">▶</span>
+              <span class="audio-label">Listen to Anita's Shelter Story</span>
+              <div class="audio-waves">
+                <span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+            <div class="sbc-footer">
+              <span class="sbc-badge">🏠 120 Children Fed Daily</span>
+              <span class="sbc-time">Daily Beneficiary</span>
             </div>
           </div>
 
           <!-- Story 3 -->
-          <div class="story-card" data-category="volunteer">
-            <div class="sc-header">
-              <div class="sc-avatar bg-blue-dim">🚴‍♂️</div>
-              <div class="sc-meta">
-                <h4 class="sc-author">David Chen</h4>
-                <p class="sc-role">Weekend Rescue Courier &bull; Software Engineer</p>
-                <div class="sc-rating">★★★★★ <span class="badge-verified">Rescue Squad</span></div>
+          <div class="story-bubble-card" data-category="volunteer">
+            <div class="sbc-header">
+              <div class="sbc-avatar bg-blue-dim">🚴‍♂️</div>
+              <div class="sbc-author-meta">
+                <h4 class="sbc-name">David Chen</h4>
+                <p class="sbc-role">Weekend Rescue Courier &bull; Software Engineer</p>
+                <div class="sbc-rating">★★★★★ <span class="badge-verified">Rescue Squad</span></div>
               </div>
             </div>
-            <p class="sc-quote">
+            <p class="sbc-text">
               "I ride an electric cargo bike. Last Saturday at 11 PM, a 500-guest wedding had over 160 untouched portions of biryani and paneer. FoodBridge alerted my phone. In 28 minutes, I had loaded the thermal boxes and brought them to an elder shelter across town. Watching their joy at a midnight feast made me cry tears of gratitude."
             </p>
-            <div class="sc-footer">
-              <span class="sc-badge">🛵 64 Rescues Completed</span>
-              <span class="sc-time">Volunteer Hero</span>
+            <div class="sbc-footer">
+              <span class="sbc-badge">🛵 64 Rescues Completed</span>
+              <span class="sbc-time">Volunteer Hero</span>
             </div>
           </div>
 
           <!-- Story 4 -->
-          <div class="story-card" data-category="donor">
-            <div class="sc-header">
-              <div class="sc-avatar bg-purple-dim">👰</div>
-              <div class="sc-meta">
-                <h4 class="sc-author">Priya & Vikram Malhotra</h4>
-                <p class="sc-role">Wedding Hosts (450 Guests)</p>
-                <div class="sc-rating">★★★★★ <span class="badge-verified">Event Donor</span></div>
+          <div class="story-bubble-card" data-category="donor">
+            <div class="sbc-header">
+              <div class="sbc-avatar bg-purple-dim">👰</div>
+              <div class="sbc-author-meta">
+                <h4 class="sbc-name">Priya & Vikram Malhotra</h4>
+                <p class="sbc-role">Wedding Hosts (450 Guests)</p>
+                <div class="sbc-rating">★★★★★ <span class="badge-verified">Event Donor</span></div>
               </div>
             </div>
-            <p class="sc-quote">
+            <p class="sbc-text">
               "We wanted our wedding day to be blessed with positive karma. We pre-scheduled FoodBridge two days before the ceremony. At midnight, their team coordinated with the caterer seamlessly without interrupting our music or dance floor. They rescued 180 plates of food that fed two night shelters."
             </p>
-            <div class="sc-footer">
-              <span class="sc-badge">🎉 180 Plates Rescued</span>
-              <span class="sc-time">Wedding Celebration</span>
+            <div class="sbc-footer">
+              <span class="sbc-badge">🎉 180 Plates Rescued</span>
+              <span class="sbc-time">Wedding Celebration</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= 9. FREQUENTLY ASKED QUESTIONS ================= -->
+    <!-- ================= 11. FAQ ACCORDION ================= -->
     <section class="faq-section" id="faq">
       <div class="container max-w-4xl">
-        <div class="section-title-wrap text-center">
-          <span class="badge-gradient-emerald">Common Questions</span>
-          <h2 class="section-heading">Answers for Chefs, Donors & Non-Profits</h2>
-          <p class="section-subtext">Everything you need to know about food safety, legal indemnity, and rapid dispatch.</p>
+        <div class="section-heading-wrap text-center">
+          <span class="pill-badge-emerald">Common Questions</span>
+          <h2 class="section-h2">Answers for Chefs, Donors & Non-Profits</h2>
+          <p class="section-lead">Everything you need to know about food safety, legal indemnity, and rapid dispatch.</p>
         </div>
 
-        <div class="faq-list">
-          <div class="faq-box active">
-            <button class="faq-question-btn" aria-expanded="true">
+        <div class="faq-accordion-list">
+          <div class="faq-item-box active">
+            <button class="faq-toggle-trigger" aria-expanded="true">
               <span>Are food donors legally protected from civil and criminal liability?</span>
-              <span class="faq-icon">&darr;</span>
+              <span class="faq-arrow-icon">&darr;</span>
             </button>
-            <div class="faq-content">
+            <div class="faq-drawer-content">
               <p>
                 <strong>Yes, 100%.</strong> Under the federal Bill Emerson Good Samaritan Food Donation Act (and corresponding international statutes), donors who donate apparently wholesome food in good faith to non-profit organizations are completely protected from liability. In addition, FoodBridge provides a formalized indemnity agreement for every corporate kitchen partner.
               </p>
             </div>
           </div>
 
-          <div class="faq-box">
-            <button class="faq-question-btn" aria-expanded="false">
+          <div class="faq-item-box">
+            <button class="faq-toggle-trigger" aria-expanded="false">
               <span>What types of surplus food are accepted through FoodBridge?</span>
-              <span class="faq-icon">&darr;</span>
+              <span class="faq-arrow-icon">&darr;</span>
             </button>
-            <div class="faq-content">
+            <div class="faq-drawer-content">
               <p>We accept:</p>
               <ul>
                 <li><strong>Freshly prepared hot meals:</strong> Buffet surplus, banquet batches, rice, curries, roasts maintained at safe holding temperatures.</li>
@@ -955,36 +1044,36 @@
             </div>
           </div>
 
-          <div class="faq-box">
-            <button class="faq-question-btn" aria-expanded="false">
+          <div class="faq-item-box">
+            <button class="faq-toggle-trigger" aria-expanded="false">
               <span>Does it cost money for restaurants or event organizers to donate?</span>
-              <span class="faq-icon">&darr;</span>
+              <span class="faq-arrow-icon">&darr;</span>
             </button>
-            <div class="faq-content">
+            <div class="faq-drawer-content">
               <p>
                 <strong>No. Food donation on FoodBridge is 100% free for all donors.</strong> In fact, donating saves commercial kitchens thousands of dollars each month in trash tipping fees, while providing automated charitable tax deduction receipts (80G / 501(c)(3)).
               </p>
             </div>
           </div>
 
-          <div class="faq-box">
-            <button class="faq-question-btn" aria-expanded="false">
+          <div class="faq-item-box">
+            <button class="faq-toggle-trigger" aria-expanded="false">
               <span>How fast is the courier pickup after logging surplus?</span>
-              <span class="faq-icon">&darr;</span>
+              <span class="faq-arrow-icon">&darr;</span>
             </button>
-            <div class="faq-content">
+            <div class="faq-drawer-content">
               <p>
                 Our average door-to-pickup response time across active city hubs is <strong>38 minutes</strong>. For scheduled events (such as weddings, gala dinners, or conferences), pickups can also be booked days in advance for guaranteed dispatch.
               </p>
             </div>
           </div>
 
-          <div class="faq-box">
-            <button class="faq-question-btn" aria-expanded="false">
+          <div class="faq-item-box">
+            <button class="faq-toggle-trigger" aria-expanded="false">
               <span>How are recipient shelters and NGOs verified?</span>
-              <span class="faq-icon">&darr;</span>
+              <span class="faq-arrow-icon">&darr;</span>
             </button>
-            <div class="faq-content">
+            <div class="faq-drawer-content">
               <p>
                 Every NGO undergoes a thorough 24-hour verification process including review of their registered non-profit license, food safety certifications, clean refrigeration and warming storage capacity, and beneficiary count verification.
               </p>
@@ -994,41 +1083,41 @@
       </div>
     </section>
 
-    <!-- ================= 10. CALL TO ACTION SECTION ================= -->
+    <!-- ================= 12. CALL TO ACTION SECTION ================= -->
     <section class="cta-section" id="cta">
       <div class="container">
-        <div class="cta-glow-card">
-          <div class="cta-content-wrap">
-            <span class="badge-gradient-emerald">Take Action Tonight</span>
-            <h2 class="cta-heading">Don't Let Good Food Turn Into Waste Tonight</h2>
-            <p class="cta-sub">
+        <div class="cta-super-card">
+          <div class="cta-inner-wrap">
+            <span class="pill-badge-emerald">Take Action Tonight</span>
+            <h2 class="cta-main-title">Don't Let Good Food Turn Into Waste Tonight</h2>
+            <p class="cta-lead-text">
               Whether you are an executive chef with 40 surplus buffet plates, a shelter feeding children, or someone with a bicycle and an hour to spare — you can be the bridge.
             </p>
 
-            <div class="cta-cards-row">
-              <div class="cta-mini-card">
-                <div class="cm-icon">👨‍🍳</div>
+            <div class="cta-cards-trio">
+              <div class="cta-persona-box">
+                <div class="cpb-icon">👨‍🍳</div>
                 <h4>Have Surplus Food?</h4>
                 <p>Commercial kitchens, hotels & caterers. Dispatch a courier in under 45 minutes.</p>
-                <button class="btn btn-emerald w-full" onclick="openModal('donateModal')">Donate Food Now</button>
+                <button class="btn btn-emerald w-full shadow-emerald-glow" onclick="openModal('donateModal')">Donate Food Now</button>
               </div>
 
-              <div class="cta-mini-card">
-                <div class="cm-icon">🤝</div>
+              <div class="cta-persona-box">
+                <div class="cpb-icon">🤝</div>
                 <h4>Are You an NGO?</h4>
                 <p>Verified shelters & soup kitchens. Receive hot nutritious meals daily at zero cost.</p>
                 <button class="btn btn-outline-white w-full" onclick="openModal('ngoModal')">Partner as Shelter</button>
               </div>
 
-              <div class="cta-mini-card">
-                <div class="cm-icon">🛵</div>
+              <div class="cta-persona-box">
+                <div class="cpb-icon">🛵</div>
                 <h4>Join the Rescue Squad</h4>
                 <p>Volunteer drivers and bike couriers. Pick up food and change lives in your neighborhood.</p>
                 <button class="btn btn-outline-white w-full" onclick="openModal('volunteerModal')">Become a Courier</button>
               </div>
             </div>
 
-            <div class="hotline-strip">
+            <div class="emergency-hotline-pill">
               <span class="hotline-icon">📞</span>
               <span><strong>24/7 Emergency Surplus Dispatch Desk:</strong> Have 50+ urgent meals ready right now? Call <strong>+1 (800) 555-FOOD (3663)</strong></span>
             </div>
@@ -1038,81 +1127,82 @@
     </section>
   </main>
 
-  <!-- ================= 11. SITE FOOTER ================= -->
+  <!-- ================= 13. SITE FOOTER ================= -->
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-top-grid">
+    <div class="container footer-layout">
+      <div class="footer-columns-grid">
         <!-- Brand Col -->
-        <div class="footer-brand-col">
+        <div class="f-col-brand">
           <a href="#" class="brand-link">
-            <div class="brand-mark">
+            <div class="brand-icon-wrap">
               <svg class="brand-svg" viewBox="0 0 44 44" fill="none">
-                <rect width="44" height="44" rx="12" fill="url(#footerBrandG)" />
-                <path d="M14 24C14 18.4772 18.4772 14 24 14C29.5228 14 34 18.4772 34 24" stroke="white" stroke-width="3" stroke-linecap="round"/>
-                <path d="M17 31C19 28 21.5 26.5 24 26.5C26.5 26.5 29 28 31 31" stroke="white" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="24" cy="20" r="3.5" fill="#FDE047"/>
+                <rect width="44" height="44" rx="12" fill="url(#footerBrandGrad)" />
+                <path d="M13 24C13 17.925 17.925 13 24 13C30.075 13 35 17.925 35 24" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                <path d="M16 31C18.5 27.5 21 26 24 26C27 26 29.5 27.5 32 31" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="24" cy="19.5" r="3.5" fill="#FDE047"/>
                 <defs>
-                  <linearGradient id="footerBrandG" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="footerBrandGrad" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#059669"/>
                     <stop offset="1" stop-color="#10B981"/>
                   </linearGradient>
                 </defs>
               </svg>
             </div>
-            <div class="brand-names">
-              <span class="brand-title text-white">Food<span class="brand-accent">Bridge</span></span>
-              <span class="brand-subtitle">Stop Food Waste • Feed Hope</span>
+            <div class="brand-text-block">
+              <span class="brand-name text-white">Food<span class="brand-name-accent">Bridge</span></span>
+              <span class="brand-tag">Stop Food Waste &bull; Feed Hope</span>
             </div>
           </a>
-          <p class="footer-desc">
+          <p class="f-brand-desc">
             FoodBridge is a non-profit technology initiative uniting commercial surplus kitchens with grassroots shelters. Every plate saved is a step toward zero hunger and climate resilience.
           </p>
-          <div class="footer-status-pill">
-            <span class="status-pulse-dot"></span>
+          <div class="f-status-badge">
+            <span class="f-status-pulse"></span>
             <span>All 14 Regional Dispatch Hubs Operational</span>
           </div>
         </div>
 
-        <!-- Links Col 1 -->
-        <div class="footer-col">
-          <h5 class="footer-heading">Platform</h5>
-          <ul class="footer-nav">
+        <!-- Col 2: Platform -->
+        <div class="f-col">
+          <h5 class="f-heading">Platform</h5>
+          <ul class="f-links">
             <li><a href="#hero">Overview</a></li>
             <li><a href="#problem">The Problem</a></li>
             <li><a href="#solution">Our Solution</a></li>
             <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#comparison">Before & After</a></li>
             <li><a href="#coverage">Coverage Map</a></li>
-            <li><a href="#features">Platform Features</a></li>
+            <li><a href="#features">Capabilities</a></li>
           </ul>
         </div>
 
-        <!-- Links Col 2 -->
-        <div class="footer-col">
-          <h5 class="footer-heading">Get Involved</h5>
-          <ul class="footer-nav">
+        <!-- Col 3: Get Involved -->
+        <div class="f-col">
+          <h5 class="f-heading">Get Involved</h5>
+          <ul class="f-links">
             <li><a href="javascript:void(0)" onclick="openModal('donateModal')">Donate Surplus Food</a></li>
             <li><a href="javascript:void(0)" onclick="openModal('ngoModal')">Register as an NGO</a></li>
-            <li><a href="javascript:void(0)" onclick="openModal('volunteerModal')">Volunteer Rescue Squad</a></li>
-            <li><a href="#impact">Impact Calculator</a></li>
+            <li><a href="javascript:void(0)" onclick="openModal('volunteerModal')">Volunteer Courier Squad</a></li>
+            <li><a href="#calculator">Impact Calculator</a></li>
             <li><a href="#stories">Community Stories</a></li>
             <li><a href="#faq">Safety Guidelines</a></li>
           </ul>
         </div>
 
-        <!-- Links Col 3: Newsletter -->
-        <div class="footer-col footer-newsletter-col">
-          <h5 class="footer-heading">Stay Connected</h5>
-          <p class="footer-newsletter-sub">
+        <!-- Col 4: Newsletter -->
+        <div class="f-col f-col-newsletter">
+          <h5 class="f-heading">Stay Connected</h5>
+          <p class="f-news-sub">
             Receive monthly impact briefings, kitchen sustainability tips, and rescue stories.
           </p>
-          <form class="footer-form" onsubmit="handleNewsletter(event)">
-            <div class="form-row-newsletter">
+          <form class="f-newsletter-form" onsubmit="handleNewsletter(event)">
+            <div class="f-input-group">
               <input type="email" id="newsletterInput" placeholder="Enter business email" required aria-label="Business Email">
               <button type="submit" class="btn btn-emerald">Subscribe</button>
             </div>
-            <div class="form-feedback" id="newsletterFeedback"></div>
+            <div class="f-feedback" id="newsletterFeedback"></div>
           </form>
-          <div class="footer-contact-info">
+          <div class="f-direct-contacts">
             <div>✉️ dispatch@foodbridge-impact.org</div>
             <div>🏢 Global Hubs: San Francisco, New York, London</div>
           </div>
@@ -1120,11 +1210,11 @@
       </div>
 
       <!-- Footer Bottom -->
-      <div class="footer-bottom">
-        <div class="footer-copy">
-          &copy; 2026 FoodBridge Global Foundation. 501(c)(3) Registered Non-Profit Social Enterprise.
+      <div class="footer-lower-bar">
+        <div class="f-copyright">
+          &copy; 2026 FoodBridge Global Foundation. Registered 501(c)(3) Non-Profit Social Enterprise.
         </div>
-        <div class="footer-legal">
+        <div class="f-legal-links">
           <a href="#">Privacy Policy</a>
           <span>&bull;</span>
           <a href="#">Terms of Service</a>
@@ -1137,54 +1227,54 @@
     </div>
   </footer>
 
-  <!-- ================= 12. MULTI-STEP FOOD DONATION WIZARD MODAL ================= -->
+  <!-- ================= 14. MULTI-STEP FOOD DONATION WIZARD MODAL ================= -->
   <div class="modal-backdrop" id="donateModal" role="dialog" aria-modal="true" aria-labelledby="donateTitle">
-    <div class="modal-card">
-      <button class="modal-close-btn" onclick="closeModal('donateModal')" aria-label="Close dialog">&times;</button>
+    <div class="modal-glass-card">
+      <button class="modal-close-icon" onclick="closeModal('donateModal')" aria-label="Close dialog">&times;</button>
       
-      <div class="modal-header">
-        <span class="modal-badge">⚡ Instant Dispatch Protocol</span>
-        <h3 class="modal-title" id="donateTitle">Schedule Surplus Food Pickup</h3>
-        <p class="modal-sub">Tell us what you have. We'll dispatch an insulated courier in minutes.</p>
+      <div class="modal-intro">
+        <span class="modal-pill-badge">⚡ Instant Dispatch Protocol</span>
+        <h3 class="modal-h3" id="donateTitle">Schedule Surplus Food Pickup</h3>
+        <p class="modal-p">Tell us what you have. We'll dispatch an insulated courier in minutes.</p>
       </div>
 
       <!-- Step Indicator -->
-      <div class="wizard-steps-indicator">
-        <div class="wiz-step-pill active" id="wizInd1">1. Kitchen Details</div>
-        <div class="wiz-step-pill" id="wizInd2">2. Food Profile</div>
-        <div class="wiz-step-pill" id="wizInd3">3. Review & Dispatch</div>
+      <div class="wiz-tracker">
+        <div class="wiz-dot-step active" id="wizInd1">1. Kitchen Details</div>
+        <div class="wiz-dot-step" id="wizInd2">2. Food Profile</div>
+        <div class="wiz-dot-step" id="wizInd3">3. Review & Dispatch</div>
       </div>
 
       <!-- Form Panels -->
       <form id="donationForm" onsubmit="submitDonation(event)">
         <!-- Step 1 -->
-        <div class="wiz-panel active" id="wizPanel1">
-          <div class="form-field">
+        <div class="wiz-page active" id="wizPanel1">
+          <div class="form-row-field">
             <label for="donorName">Organization or Kitchen Name *</label>
-            <input type="text" id="donorName" class="modal-input" placeholder="e.g. The Grand Bistro / Marriott Banquets" required>
+            <input type="text" id="donorName" class="form-control" placeholder="e.g. The Grand Promenade / Marriott Banquets" required>
           </div>
 
-          <div class="form-grid-2">
-            <div class="form-field">
+          <div class="form-pair-grid">
+            <div class="form-row-field">
               <label for="donorCategory">Establishment Type *</label>
-              <select id="donorCategory" class="modal-select" required>
-                <option value="Restaurant">Restaurant / Bistro</option>
+              <select id="donorCategory" class="form-control" required>
                 <option value="Hotel">Hotel Buffet & Banquets</option>
+                <option value="Restaurant">Restaurant / Bistro</option>
                 <option value="Event">Wedding / Catered Gala</option>
                 <option value="Bakery">Bakery / Patisserie</option>
                 <option value="Corporate">Corporate Office Cafeteria</option>
                 <option value="Supermarket">Supermarket / Grocer</option>
               </select>
             </div>
-            <div class="form-field">
+            <div class="form-row-field">
               <label for="donorPhone">Contact Phone (for Driver) *</label>
-              <input type="tel" id="donorPhone" class="modal-input" placeholder="+1 (555) 019-2834" required>
+              <input type="tel" id="donorPhone" class="form-control" placeholder="+1 (555) 019-2834" required>
             </div>
           </div>
 
-          <div class="form-field">
+          <div class="form-row-field">
             <label for="donorAddress">Pickup Address & City *</label>
-            <input type="text" id="donorAddress" class="modal-input" placeholder="e.g. 742 Evergreen Terrace, Downtown Kitchen Entrance" required>
+            <input type="text" id="donorAddress" class="form-control" placeholder="e.g. 742 Evergreen Terrace, Downtown Kitchen Entrance" required>
           </div>
 
           <button type="button" class="btn btn-emerald w-full mt-4" onclick="nextWizStep(2)">
@@ -1193,11 +1283,11 @@
         </div>
 
         <!-- Step 2 -->
-        <div class="wiz-panel" id="wizPanel2">
-          <div class="form-grid-2">
-            <div class="form-field">
+        <div class="wiz-page" id="wizPanel2">
+          <div class="form-pair-grid">
+            <div class="form-row-field">
               <label for="foodCategory">Primary Food Category *</label>
-              <select id="foodCategory" class="modal-select" required>
+              <select id="foodCategory" class="form-control" required>
                 <option value="Cooked Hot Dishes">Cooked Hot Dishes (Rice, Curry, Pastas, Roasts)</option>
                 <option value="Artisan Breads">Artisan Breads, Bagels & Pastries</option>
                 <option value="Fresh Produce">Fresh Fruits & Raw Vegetables</option>
@@ -1206,24 +1296,24 @@
               </select>
             </div>
 
-            <div class="form-field">
+            <div class="form-row-field">
               <label for="foodPortions">Approx. Portions / Servings *</label>
-              <input type="number" id="foodPortions" class="modal-input" min="5" max="5000" placeholder="e.g. 50 servings" required>
+              <input type="number" id="foodPortions" class="form-control" min="5" max="5000" placeholder="e.g. 50 servings" required>
             </div>
           </div>
 
-          <div class="form-grid-2">
-            <div class="form-field">
+          <div class="form-pair-grid">
+            <div class="form-row-field">
               <label for="foodPrepTime">When Was It Prepared? *</label>
-              <select id="foodPrepTime" class="modal-select" required>
+              <select id="foodPrepTime" class="form-control" required>
                 <option value="Fresh (Within 2 hrs)">Freshly Prepared (Within 2 Hours)</option>
                 <option value="Chilled Today">Prepared Today & Chilled</option>
                 <option value="Packaged Sealed">Sealed Packaged</option>
               </select>
             </div>
-            <div class="form-field">
+            <div class="form-row-field">
               <label for="pickupSlot">Requested Pickup Window *</label>
-              <select id="pickupSlot" class="modal-select" required>
+              <select id="pickupSlot" class="form-control" required>
                 <option value="Immediate (&lt; 45 mins)">⚡ Immediate ASAP (&lt; 45 mins)</option>
                 <option value="Tonight (9 PM - 11 PM)">Tonight (9:00 PM - 11:00 PM)</option>
                 <option value="Tomorrow Morning (7 AM - 9 AM)">Tomorrow Morning (7:00 AM - 9:00 AM)</option>
@@ -1231,132 +1321,132 @@
             </div>
           </div>
 
-          <div class="form-checkbox-row">
+          <div class="form-check-line">
             <input type="checkbox" id="hygieneAgreement" required>
             <label for="hygieneAgreement">I certify this food has been handled hygienically, kept at food-safe temperatures, and is wholesome for human consumption.</label>
           </div>
 
-          <div class="modal-btn-row mt-4">
+          <div class="modal-actions-pair mt-4">
             <button type="button" class="btn btn-ghost" onclick="nextWizStep(1)">&larr; Back</button>
             <button type="button" class="btn btn-emerald" onclick="nextWizStep(3)">Review & Dispatch &rarr;</button>
           </div>
         </div>
 
         <!-- Step 3 -->
-        <div class="wiz-panel" id="wizPanel3">
-          <div class="summary-card">
-            <h4 class="sum-title">📋 Dispatch Order Preview</h4>
-            <div class="sum-line"><span>Kitchen:</span><strong id="sumName">—</strong></div>
-            <div class="sum-line"><span>Food Type:</span><strong id="sumCategory">—</strong></div>
-            <div class="sum-line"><span>Portions:</span><strong id="sumPortions">—</strong></div>
-            <div class="sum-line"><span>Requested Window:</span><strong id="sumSlot">—</strong></div>
-            <div class="sum-line"><span>Estimated Impact:</span><strong class="text-emerald" id="sumImpact">—</strong></div>
+        <div class="wiz-page" id="wizPanel3">
+          <div class="order-summary-card">
+            <h4 class="osc-title">📋 Dispatch Order Preview</h4>
+            <div class="osc-line"><span>Kitchen:</span><strong id="sumName">—</strong></div>
+            <div class="osc-line"><span>Food Type:</span><strong id="sumCategory">—</strong></div>
+            <div class="osc-line"><span>Portions:</span><strong id="sumPortions">—</strong></div>
+            <div class="osc-line"><span>Requested Window:</span><strong id="sumSlot">—</strong></div>
+            <div class="osc-line"><span>Estimated Impact:</span><strong class="text-emerald" id="sumImpact">—</strong></div>
           </div>
 
-          <div class="guarantee-box">
+          <div class="guarantee-alert">
             <svg class="w-5 h-5 text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             <span>An insulated courier is pre-allocated in your zone. Confirmation SMS will be sent with driver ETA.</span>
           </div>
 
-          <div class="modal-btn-row mt-4">
+          <div class="modal-actions-pair mt-4">
             <button type="button" class="btn btn-ghost" onclick="nextWizStep(2)">&larr; Edit</button>
-            <button type="submit" class="btn btn-emerald">🚀 Confirm & Dispatch Courier</button>
+            <button type="submit" class="btn btn-emerald shadow-emerald-glow">🚀 Confirm & Dispatch Courier</button>
           </div>
         </div>
       </form>
 
       <!-- Confirmation Screen -->
-      <div class="wiz-success hidden" id="donateSuccess">
-        <div class="success-icon-wrap">🎉</div>
-        <h3 class="success-heading">Courier Dispatched!</h3>
-        <p class="success-sub">Courier Assigned: <strong>Aisha Rahman (Eco-Van #108)</strong> is en route to your kitchen.</p>
+      <div class="wiz-success-screen hidden" id="donateSuccess">
+        <div class="success-check-badge">🎉</div>
+        <h3 class="success-h3">Courier Dispatched!</h3>
+        <p class="success-subtext">Courier Assigned: <strong>Aisha Rahman (Eco-Van #108)</strong> is en route to your kitchen.</p>
         
-        <div class="tracking-pill-box">
-          <div class="track-code">DISPATCH ID: <span id="dynTrackingId">FB-9241-EXP</span></div>
-          <div class="track-eta">
-            <span class="ping-dot"></span>
+        <div class="dispatch-tracking-pill">
+          <div class="track-code-text">DISPATCH ID: <span id="dynTrackingId">FB-9241-EXP</span></div>
+          <div class="track-live-eta">
+            <span class="live-dot-glow"></span>
             <span>Estimated Arrival: <strong>24 Minutes</strong></span>
           </div>
         </div>
 
-        <p class="success-footer-note">A confirmation SMS with your digital transfer QR pass has been sent to your phone. Thank you for turning surplus food into smiles!</p>
+        <p class="success-footer-sub">A confirmation SMS with your digital transfer QR pass has been sent to your phone. Thank you for turning surplus food into smiles!</p>
         <button type="button" class="btn btn-emerald w-full mt-4" onclick="closeModal('donateModal')">Done</button>
       </div>
     </div>
   </div>
 
-  <!-- ================= 13. NGO PARTNER MODAL ================= -->
+  <!-- ================= 15. NGO PARTNER MODAL ================= -->
   <div class="modal-backdrop" id="ngoModal" role="dialog" aria-modal="true">
-    <div class="modal-card">
-      <button class="modal-close-btn" onclick="closeModal('ngoModal')">&times;</button>
-      <div class="modal-header">
-        <span class="modal-badge">🤝 Shelter Partnership</span>
-        <h3 class="modal-title">Apply as a Verified NGO Partner</h3>
-        <p class="modal-sub">Receive regular hot, nutritious meal deliveries for your shelter at zero cost.</p>
+    <div class="modal-glass-card">
+      <button class="modal-close-icon" onclick="closeModal('ngoModal')">&times;</button>
+      <div class="modal-intro">
+        <span class="modal-pill-badge">🤝 Shelter Partnership</span>
+        <h3 class="modal-h3">Apply as a Verified NGO Partner</h3>
+        <p class="modal-p">Receive regular hot, nutritious meal deliveries for your shelter at zero cost.</p>
       </div>
 
       <form id="ngoForm" onsubmit="submitNgo(event)">
-        <div class="form-field">
+        <div class="form-row-field">
           <label for="ngoName">Organization / Shelter Name *</label>
-          <input type="text" id="ngoName" class="modal-input" placeholder="e.g. Hope Horizon Shelter" required>
+          <input type="text" id="ngoName" class="form-control" placeholder="e.g. Hope Horizon Shelter" required>
         </div>
-        <div class="form-grid-2">
-          <div class="form-field">
+        <div class="form-pair-grid">
+          <div class="form-row-field">
             <label for="ngoReg">Non-Profit Reg / 501(c)(3) ID *</label>
-            <input type="text" id="ngoReg" class="modal-input" placeholder="e.g. 501C3-481928" required>
+            <input type="text" id="ngoReg" class="form-control" placeholder="e.g. 501C3-481928" required>
           </div>
-          <div class="form-field">
+          <div class="form-row-field">
             <label for="ngoCapacity">Daily Beneficiaries Served *</label>
-            <input type="number" id="ngoCapacity" class="modal-input" placeholder="e.g. 150 people" required>
+            <input type="number" id="ngoCapacity" class="form-control" placeholder="e.g. 150 people" required>
           </div>
         </div>
-        <div class="form-field">
+        <div class="form-row-field">
           <label for="ngoStorage">Kitchen & Storage Capabilities *</label>
-          <select id="ngoStorage" class="modal-select" required>
+          <select id="ngoStorage" class="form-control" required>
             <option value="full">We have commercial refrigeration & warming ovens</option>
             <option value="refrig">Refrigeration only (we serve chilled)</option>
             <option value="immediate">Immediate distribution only (within 2 hours)</option>
           </select>
         </div>
-        <div class="form-field">
+        <div class="form-row-field">
           <label for="ngoContact">Lead Coordinator Phone & Email *</label>
-          <input type="text" id="ngoContact" class="modal-input" placeholder="director@hopehorizon.org | +1 555-0192" required>
+          <input type="text" id="ngoContact" class="form-control" placeholder="director@hopehorizon.org | +1 555-0192" required>
         </div>
         <button type="submit" class="btn btn-emerald w-full mt-4">Submit NGO Application</button>
       </form>
 
-      <div class="wiz-success hidden" id="ngoSuccess">
-        <div class="success-icon-wrap">✅</div>
-        <h3 class="success-heading">Application Received!</h3>
-        <p class="success-sub">Our community coordinator will review your documentation within 24 hours to activate your shelter's daily dispatch feed.</p>
+      <div class="wiz-success-screen hidden" id="ngoSuccess">
+        <div class="success-check-badge">✅</div>
+        <h3 class="success-h3">Application Received!</h3>
+        <p class="success-subtext">Our community coordinator will review your documentation within 24 hours to activate your shelter's daily dispatch feed.</p>
         <button type="button" class="btn btn-ghost w-full mt-4" onclick="closeModal('ngoModal')">Close</button>
       </div>
     </div>
   </div>
 
-  <!-- ================= 14. VOLUNTEER HERO MODAL ================= -->
+  <!-- ================= 16. VOLUNTEER HERO MODAL ================= -->
   <div class="modal-backdrop" id="volunteerModal" role="dialog" aria-modal="true">
-    <div class="modal-card">
-      <button class="modal-close-btn" onclick="closeModal('volunteerModal')">&times;</button>
-      <div class="modal-header">
-        <span class="modal-badge">🛵 Food Rescue Squad</span>
-        <h3 class="modal-title">Join the Volunteer Rescue Squad</h3>
-        <p class="modal-sub">Pick up food from kitchens and deliver to neighborhood shelters. Flexible hours, massive direct impact.</p>
+    <div class="modal-glass-card">
+      <button class="modal-close-icon" onclick="closeModal('volunteerModal')">&times;</button>
+      <div class="modal-intro">
+        <span class="modal-pill-badge">🛵 Food Rescue Squad</span>
+        <h3 class="modal-h3">Join the Volunteer Rescue Squad</h3>
+        <p class="modal-p">Pick up food from kitchens and deliver to neighborhood shelters. Flexible hours, massive direct impact.</p>
       </div>
 
       <form id="volunteerForm" onsubmit="submitVolunteer(event)">
-        <div class="form-field">
+        <div class="form-row-field">
           <label for="volName">Full Name *</label>
-          <input type="text" id="volName" class="modal-input" placeholder="e.g. Sarah Jenkins" required>
+          <input type="text" id="volName" class="form-control" placeholder="e.g. Sarah Jenkins" required>
         </div>
-        <div class="form-grid-2">
-          <div class="form-field">
+        <div class="form-pair-grid">
+          <div class="form-row-field">
             <label for="volPhone">Phone Number *</label>
-            <input type="tel" id="volPhone" class="modal-input" placeholder="+1 (555) 234-5678" required>
+            <input type="tel" id="volPhone" class="form-control" placeholder="+1 (555) 234-5678" required>
           </div>
-          <div class="form-field">
+          <div class="form-row-field">
             <label for="volVehicle">Vehicle Type *</label>
-            <select id="volVehicle" class="modal-select" required>
+            <select id="volVehicle" class="form-control" required>
               <option value="Car / SUV">Car / SUV (Large Capacity)</option>
               <option value="eBike">Cargo eBike / Bicycle</option>
               <option value="Motorcycle">Motorcycle / Scooter</option>
@@ -1364,41 +1454,110 @@
             </select>
           </div>
         </div>
-        <div class="form-field">
+        <div class="form-row-field">
           <label for="volZone">Preferred Neighborhood / Hub *</label>
-          <input type="text" id="volZone" class="modal-input" placeholder="e.g. Downtown, Brooklyn, West End" required>
+          <input type="text" id="volZone" class="form-control" placeholder="e.g. Downtown, Brooklyn, West End" required>
         </div>
         <button type="submit" class="btn btn-emerald w-full mt-4">Join Rescue Squad</button>
       </form>
 
-      <div class="wiz-success hidden" id="volunteerSuccess">
-        <div class="success-icon-wrap">🌟</div>
-        <h3 class="success-heading">Welcome to the Squad!</h3>
-        <p class="success-sub">We've texted your invite code to download the FoodBridge Courier App. We will ship you an insulated thermal rescue bag this week!</p>
+      <div class="wiz-success-screen hidden" id="volunteerSuccess">
+        <div class="success-check-badge">🌟</div>
+        <h3 class="success-h3">Welcome to the Squad!</h3>
+        <p class="success-subtext">We've texted your invite code to download the FoodBridge Courier App. We will ship you an insulated thermal rescue bag this week!</p>
         <button type="button" class="btn btn-ghost w-full mt-4" onclick="closeModal('volunteerModal')">Close</button>
       </div>
     </div>
   </div>
 
-  <!-- ================= 15. FLOATING LIVE RESCUE TICKER TOAST ================= -->
-  <aside class="rescue-toast-banner" id="rescueToast" aria-live="polite">
-    <div class="toast-indicator">🍲</div>
-    <div class="toast-content">
-      <div class="toast-headline" id="toastHeadline">Live Rescue in Progress</div>
-      <div class="toast-body" id="toastBody">45 Hot meals rescued from The Grand Promenade &rarr; Delivered to St. Jude Youth Shelter (2.4 km)</div>
-      <span class="toast-timestamp" id="toastTimestamp">Just now</span>
+  <!-- ================= 17. OFFICIAL ESG CERTIFICATE MODAL (NEW) ================= -->
+  <div class="modal-backdrop" id="certificateModal" role="dialog" aria-modal="true">
+    <div class="modal-glass-card cert-card-wide">
+      <button class="modal-close-icon" onclick="closeModal('certificateModal')">&times;</button>
+      
+      <div class="cert-printable-box" id="printableCert">
+        <div class="cert-gold-border">
+          <div class="cert-top-header">
+            <div class="cert-emblem">🏆</div>
+            <div class="cert-title-group">
+              <span class="cert-lead-tag">OFFICIAL CERTIFICATE OF COMMENDATION</span>
+              <h2 class="cert-main-headline">Zero Food Waste & Community Stewardship</h2>
+              <span class="cert-ref">SERIAL ID: <strong>FB-ESG-2026-9812</strong> &bull; VERIFIED</span>
+            </div>
+          </div>
+
+          <div class="cert-body-text">
+            <p>This certifies that the surplus food stewardship program conducted by:</p>
+            <h3 class="cert-recipient-name" id="certRecipient">The Grand Promenade Culinary Group</h3>
+            <p>has been officially verified under the <strong>FoodBridge Hyperlocal Redistribution Protocol</strong>, preventing landfill methane emissions and delivering dignified nutrition to certified shelters.</p>
+          </div>
+
+          <div class="cert-metrics-row">
+            <div class="cert-stat-badge">
+              <span class="csb-num" id="certMeals">500</span>
+              <span class="csb-lbl">Meals Delivered</span>
+            </div>
+            <div class="cert-stat-badge">
+              <span class="csb-num" id="certCo2">625 kg</span>
+              <span class="csb-lbl">CO2e Offset</span>
+            </div>
+            <div class="cert-stat-badge">
+              <span class="csb-num" id="certWater">125,000 L</span>
+              <span class="csb-lbl">Water Preserved</span>
+            </div>
+            <div class="cert-stat-badge">
+              <span class="csb-num" id="certTax">$1,500</span>
+              <span class="csb-lbl">Charitable Deduction</span>
+            </div>
+          </div>
+
+          <div class="cert-footer-signatures">
+            <div class="sig-block">
+              <div class="sig-line">Dr. Elena Rostova</div>
+              <span class="sig-role">Director of Impact Verification, FoodBridge</span>
+            </div>
+            <div class="cert-seal-stamp">
+              <div class="stamp-circle">
+                <span>VERIFIED</span>
+                <span>★ 2026 ★</span>
+              </div>
+            </div>
+            <div class="sig-block">
+              <div class="sig-line">UN SDG Coalition</div>
+              <span class="sig-role">Sustainable Development Partner #SDG2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-actions-row mt-4">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('certificateModal')">Close Preview</button>
+        <button type="button" class="btn btn-emerald shadow-emerald-glow" onclick="window.print()">
+          🖨️ Print / Save Official Certificate PDF
+        </button>
+      </div>
     </div>
-    <button class="toast-close" id="dismissToastBtn" aria-label="Dismiss notification">&times;</button>
+  </div>
+
+  <!-- ================= 18. FLOATING LIVE RESCUE TICKER TOAST ================= -->
+  <aside class="floating-rescue-toast-bar" id="rescueToast" aria-live="polite">
+    <div class="toast-avatar-box">🍲</div>
+    <div class="toast-text-box">
+      <div class="toast-title-text" id="toastHeadline">Live Rescue in Progress</div>
+      <div class="toast-detail-text" id="toastBody">45 Hot meals rescued from The Grand Promenade &rarr; Delivered to St. Jude Youth Shelter (2.4 km)</div>
+      <span class="toast-time-ago" id="toastTimestamp">Just now</span>
+    </div>
+    <button class="toast-close-btn" id="dismissToastBtn" aria-label="Dismiss notification">&times;</button>
   </aside>
 
-  <!-- ================= 16. MOBILE STICKY DONATION BAR ================= -->
-  <div class="mobile-sticky-bar">
-    <button class="btn btn-emerald w-full shadow-lg" onclick="openModal('donateModal')">
+  <!-- ================= 19. MOBILE STICKY DONATION BAR ================= -->
+  <div class="mobile-sticky-dock">
+    <button class="btn btn-emerald w-full shadow-emerald-glow" onclick="openModal('donateModal')">
       ⚡ Donate Surplus Food Now
     </button>
   </div>
 
-  <!-- Custom Interactive JavaScript -->
+  <!-- Interactive JavaScript Logic -->
   <script src="app.js"></script>
 </body>
 </html>

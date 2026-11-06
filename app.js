@@ -1,17 +1,19 @@
 /**
  * FoodBridge — Stop Food Waste Platform
- * Dynamic Interactive Application Logic 2.0
+ * Core Application Logic 3.0 (Award-Winning Interactive Edition)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
-  initMissionClock();
-  initHubCitySelector();
+  initMissionControlClock();
+  initRadarHubSelector();
   initAnimatedCounters();
+  initBeforeAfterComparison();
   initImpactCalculator();
   initCoverageChecker();
   initHowItWorksTabs();
   initStoryFilters();
+  initAudioPillInteractions();
   initFaqAccordion();
   initRescueToast();
   initModalTriggers();
@@ -20,40 +22,40 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ================= 1. NAVBAR & NAVIGATION ================= */
 function initNavbar() {
   const navbar = document.getElementById('navbar');
-  const mobileToggle = document.getElementById('mobileToggle');
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const mobileDrawer = document.getElementById('mobileDrawer');
-  const mobileLinks = document.querySelectorAll('.mobile-link');
+  const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
 
-  // Sticky Navbar background on scroll
+  // Sticky header on scroll
   window.addEventListener('scroll', () => {
     if (window.scrollY > 30) {
       navbar.classList.add('scrolled');
     } else {
       navbar.classList.remove('scrolled');
     }
-    highlightActiveNav();
+    highlightCurrentSection();
   });
 
   // Mobile menu toggle
-  if (mobileToggle && mobileDrawer) {
-    mobileToggle.addEventListener('click', () => {
-      const isExpanded = mobileToggle.getAttribute('aria-expanded') === 'true';
-      mobileToggle.setAttribute('aria-expanded', !isExpanded);
-      mobileToggle.classList.toggle('active');
+  if (mobileMenuBtn && mobileDrawer) {
+    mobileMenuBtn.addEventListener('click', () => {
+      const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+      mobileMenuBtn.setAttribute('aria-expanded', !isExpanded);
+      mobileMenuBtn.classList.toggle('active');
       mobileDrawer.classList.toggle('open');
     });
 
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        mobileToggle.classList.remove('active');
+    mobileNavItems.forEach(item => {
+      item.addEventListener('click', () => {
+        mobileMenuBtn.classList.remove('active');
         mobileDrawer.classList.remove('open');
-        mobileToggle.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
       });
     });
   }
 
-  // Highlight active section on scroll
-  function highlightActiveNav() {
+  // ScrollSpy active link tracking
+  function highlightCurrentSection() {
     const sections = document.querySelectorAll('section[id]');
     const scrollPos = window.pageYOffset + 140;
 
@@ -63,7 +65,7 @@ function initNavbar() {
       const id = sec.getAttribute('id');
 
       if (scrollPos >= top && scrollPos < top + height) {
-        document.querySelectorAll('.nav-item').forEach(link => {
+        document.querySelectorAll('.menu-item').forEach(link => {
           link.classList.remove('active');
           if (link.getAttribute('href') === `#${id}`) {
             link.classList.add('active');
@@ -75,8 +77,8 @@ function initNavbar() {
 }
 
 /* ================= 2. LIVE MISSION CONTROL CLOCK ================= */
-function initMissionClock() {
-  const clockEl = document.getElementById('missionClock');
+function initMissionControlClock() {
+  const clockEl = document.getElementById('missionControlClock');
   if (!clockEl) return;
 
   function update() {
@@ -88,40 +90,25 @@ function initMissionClock() {
   setInterval(update, 1000);
 }
 
-/* ================= 3. REGIONAL HUB SWITCHER ================= */
-function initHubCitySelector() {
-  const hubSelect = document.getElementById('hubCitySelect');
-  const headlineEl = document.getElementById('topTickerHeadline');
+/* ================= 3. REGIONAL RADAR HUB SELECTOR ================= */
+function initRadarHubSelector() {
+  const hubDropdown = document.getElementById('hubSelector');
+  const statusEl = document.getElementById('topLiveStatus');
 
-  if (!hubSelect) return;
+  if (!hubDropdown) return;
 
-  const hubData = {
-    nyc: {
-      headline: "<strong>38 Active Food Rescues</strong> in progress right now across New York Metro",
-      city: "New York Metro"
-    },
-    sf: {
-      headline: "<strong>26 Active Food Rescues</strong> in progress across San Francisco & Oakland",
-      city: "San Francisco Bay"
-    },
-    chi: {
-      headline: "<strong>31 Active Food Rescues</strong> in progress across Chicago Greater Area",
-      city: "Chicago Greater"
-    },
-    ldn: {
-      headline: "<strong>44 Active Food Rescues</strong> in progress across Greater London & Boroughs",
-      city: "London Hub"
-    },
-    atx: {
-      headline: "<strong>19 Active Food Rescues</strong> in progress across Austin & Central Texas",
-      city: "Austin Central"
-    }
+  const hubMap = {
+    nyc: "<strong>38 Active Food Rescues</strong> in progress across New York Metro",
+    sf: "<strong>26 Active Food Rescues</strong> in progress across San Francisco & Oakland",
+    chi: "<strong>31 Active Food Rescues</strong> in progress across Chicago Greater Area",
+    ldn: "<strong>44 Active Food Rescues</strong> in progress across Greater London & Boroughs",
+    atx: "<strong>19 Active Food Rescues</strong> in progress across Austin & Central Texas"
   };
 
-  hubSelect.addEventListener('change', (e) => {
-    const selected = hubData[e.target.value];
-    if (selected && headlineEl) {
-      headlineEl.innerHTML = selected.headline;
+  hubDropdown.addEventListener('change', (e) => {
+    const text = hubMap[e.target.value];
+    if (text && statusEl) {
+      statusEl.innerHTML = text;
     }
   });
 }
@@ -143,8 +130,8 @@ function initAnimatedCounters() {
     });
   }, { threshold: 0.1 });
 
-  const heroSection = document.getElementById('hero');
-  if (heroSection) observer.observe(heroSection);
+  const heroSec = document.getElementById('hero');
+  if (heroSec) observer.observe(heroSec);
 
   function animateNumber(element, target, duration) {
     const frameRate = 1000 / 60;
@@ -168,13 +155,38 @@ function initAnimatedCounters() {
   }
 }
 
-/* ================= 5. INTERACTIVE IMPACT CALCULATOR ================= */
+/* ================= 5. BEFORE & AFTER COMPARISON TOGGLE ================= */
+function initBeforeAfterComparison() {
+  const btnWithout = document.getElementById('btnShowWithout');
+  const btnWith = document.getElementById('btnShowWith');
+  const panelWithout = document.getElementById('panelWithout');
+  const panelWith = document.getElementById('panelWith');
+
+  if (!btnWithout || !btnWith) return;
+
+  btnWithout.addEventListener('click', () => {
+    btnWithout.classList.add('active');
+    btnWith.classList.remove('active');
+    panelWithout.classList.remove('hidden');
+    panelWith.classList.add('hidden');
+  });
+
+  btnWith.addEventListener('click', () => {
+    btnWith.classList.add('active');
+    btnWithout.classList.remove('active');
+    panelWith.classList.remove('hidden');
+    panelWithout.classList.add('hidden');
+  });
+}
+
+/* ================= 6. INTERACTIVE IMPACT CALCULATOR ================= */
 function initImpactCalculator() {
   const slider = document.getElementById('calcSlider');
   const weightDisplay = document.getElementById('calcWeightNumber');
   const facilitySelect = document.getElementById('calcFacilityType');
-  const presetPills = document.querySelectorAll('.preset-pill');
+  const presetBtns = document.querySelectorAll('.preset-btn');
   const pledgeBtn = document.getElementById('pledgeSurplusBtn');
+  const certBtn = document.getElementById('openCertificateBtn');
 
   const resMeals = document.getElementById('calcMealsResult');
   const resCo2 = document.getElementById('calcCo2Result');
@@ -182,15 +194,21 @@ function initImpactCalculator() {
   const resWater = document.getElementById('calcWaterResult');
   const resTax = document.getElementById('calcTaxResult');
 
+  // Certificate fields
+  const certRecipient = document.getElementById('certRecipient');
+  const certMeals = document.getElementById('certMeals');
+  const certCo2 = document.getElementById('certCo2');
+  const certWater = document.getElementById('certWater');
+  const certTax = document.getElementById('certTax');
+
   if (!slider) return;
 
   function calculate(weight) {
     if (weightDisplay) weightDisplay.textContent = weight.toLocaleString();
 
-    // Calculations based on EPA WARM model and UN FAO food rescue factors
     const meals = Math.round(weight * 2); // 1kg ≈ 2 meals
     const co2Kg = Math.round(weight * 2.5); // 1kg saved ≈ 2.5kg CO2e avoided
-    const cars = (co2Kg / 220).toFixed(1); // 1 passenger car emits ~220kg CO2/month
+    const cars = (co2Kg / 220).toFixed(1); // 1 car emits ~220kg CO2/month
     const waterLiters = Math.round(weight * 500); // 1kg food ≈ 500L lifecycle water
     const taxWriteOff = Math.round(weight * 6); // $6 standard charitable deduction per kg
 
@@ -199,22 +217,31 @@ function initImpactCalculator() {
     if (resCars) resCars.textContent = cars;
     if (resWater) resWater.textContent = `${waterLiters.toLocaleString()} L`;
     if (resTax) resTax.textContent = `$${taxWriteOff.toLocaleString()}`;
+
+    // Update Certificate modal preview
+    if (certMeals) certMeals.textContent = meals.toLocaleString();
+    if (certCo2) certCo2.textContent = `${co2Kg.toLocaleString()} kg`;
+    if (certWater) certWater.textContent = `${waterLiters.toLocaleString()} L`;
+    if (certTax) certTax.textContent = `$${taxWriteOff.toLocaleString()}`;
+    if (certRecipient && facilitySelect) {
+      certRecipient.textContent = facilitySelect.options[facilitySelect.selectedIndex].text + ' Culinary Team';
+    }
   }
 
   slider.addEventListener('input', (e) => {
     const val = parseInt(e.target.value, 10);
     calculate(val);
 
-    presetPills.forEach(pill => {
-      pill.classList.toggle('active', parseInt(pill.dataset.kg, 10) === val);
+    presetBtns.forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.kg, 10) === val);
     });
   });
 
-  presetPills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      presetPills.forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      const val = parseInt(pill.dataset.kg, 10);
+  presetBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      presetBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const val = parseInt(btn.dataset.kg, 10);
       slider.value = val;
       calculate(val);
     });
@@ -245,8 +272,14 @@ function initImpactCalculator() {
       const currentWeight = parseInt(slider.value, 10);
       if (portionsInput) portionsInput.value = currentWeight * 2;
       if (catSelect && facilitySelect) {
-        catSelect.value = capitalizeFirst(facilitySelect.value);
+        catSelect.value = mapFacilityToDonorCategory(facilitySelect.value);
       }
+    });
+  }
+
+  if (certBtn) {
+    certBtn.addEventListener('click', () => {
+      openModal('certificateModal');
     });
   }
 
@@ -254,7 +287,7 @@ function initImpactCalculator() {
   calculate(parseInt(slider.value, 10));
 }
 
-function capitalizeFirst(val) {
+function mapFacilityToDonorCategory(val) {
   const map = {
     hotel: 'Hotel',
     restaurant: 'Restaurant',
@@ -266,7 +299,7 @@ function capitalizeFirst(val) {
   return map[val] || 'Restaurant';
 }
 
-/* ================= 6. LIVE COVERAGE CHECKER ================= */
+/* ================= 7. LIVE COVERAGE CHECKER ================= */
 function initCoverageChecker() {
   window.checkCoverage = function(e) {
     e.preventDefault();
@@ -281,53 +314,51 @@ function initCoverageChecker() {
 
     if (cityName) cityName.textContent = query;
     resultBox.classList.remove('hidden');
-
-    // Smooth scroll into focus
     resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
 }
 
-/* ================= 7. HOW IT WORKS TABS ================= */
+/* ================= 8. HOW IT WORKS TABS ================= */
 function initHowItWorksTabs() {
-  const tabBtnDonor = document.getElementById('tabBtnDonor');
-  const tabBtnNgo = document.getElementById('tabBtnNgo');
+  const tabDonor = document.getElementById('tabDonorBtn');
+  const tabNgo = document.getElementById('tabNgoBtn');
   const donorPanels = document.getElementById('donorPanels');
   const ngoPanels = document.getElementById('ngoPanels');
 
-  if (!tabBtnDonor || !tabBtnNgo) return;
+  if (!tabDonor || !tabNgo) return;
 
-  tabBtnDonor.addEventListener('click', () => {
-    tabBtnDonor.classList.add('active');
-    tabBtnDonor.setAttribute('aria-selected', 'true');
-    tabBtnNgo.classList.remove('active');
-    tabBtnNgo.setAttribute('aria-selected', 'false');
+  tabDonor.addEventListener('click', () => {
+    tabDonor.classList.add('active');
+    tabDonor.setAttribute('aria-selected', 'true');
+    tabNgo.classList.remove('active');
+    tabNgo.setAttribute('aria-selected', 'false');
 
     donorPanels.classList.remove('hidden');
     ngoPanels.classList.add('hidden');
   });
 
-  tabBtnNgo.addEventListener('click', () => {
-    tabBtnNgo.classList.add('active');
-    tabBtnNgo.setAttribute('aria-selected', 'true');
-    tabBtnDonor.classList.remove('active');
-    tabBtnDonor.setAttribute('aria-selected', 'false');
+  tabNgo.addEventListener('click', () => {
+    tabNgo.classList.add('active');
+    tabNgo.setAttribute('aria-selected', 'true');
+    tabDonor.classList.remove('active');
+    tabDonor.setAttribute('aria-selected', 'false');
 
     ngoPanels.classList.remove('hidden');
     donorPanels.classList.add('hidden');
   });
 }
 
-/* ================= 8. COMMUNITY STORIES FILTER ================= */
+/* ================= 9. COMMUNITY STORIES FILTER ================= */
 function initStoryFilters() {
-  const pills = document.querySelectorAll('.filter-pill');
-  const cards = document.querySelectorAll('.story-card');
+  const tabs = document.querySelectorAll('.cat-pill');
+  const cards = document.querySelectorAll('.story-bubble-card');
 
-  pills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      pills.forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
 
-      const filter = pill.dataset.filter;
+      const filter = tab.dataset.filter;
 
       cards.forEach(card => {
         const cat = card.dataset.category;
@@ -341,32 +372,56 @@ function initStoryFilters() {
   });
 }
 
-/* ================= 9. FAQ ACCORDION ================= */
-function initFaqAccordion() {
-  const faqBoxes = document.querySelectorAll('.faq-box');
+/* ================= 10. AUDIO PILL MICRO-INTERACTION ================= */
+function initAudioPillInteractions() {
+  const audioPills = document.querySelectorAll('.sbc-audio-pill');
 
-  faqBoxes.forEach(box => {
-    const btn = box.querySelector('.faq-question-btn');
-    if (!btn) return;
+  audioPills.forEach(pill => {
+    let isPlaying = false;
+    pill.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      const playIcon = pill.querySelector('.audio-play-icon');
+      const label = pill.querySelector('.audio-label');
 
-    btn.addEventListener('click', () => {
-      const wasActive = box.classList.contains('active');
-
-      faqBoxes.forEach(b => {
-        b.classList.remove('active');
-        const bBtn = b.querySelector('.faq-question-btn');
-        if (bBtn) bBtn.setAttribute('aria-expanded', 'false');
-      });
-
-      if (!wasActive) {
-        box.classList.add('active');
-        btn.setAttribute('aria-expanded', 'true');
+      if (isPlaying) {
+        if (playIcon) playIcon.textContent = '⏸';
+        if (label) label.textContent = 'Playing Audio Note...';
+        pill.style.background = 'rgba(16, 185, 129, 0.25)';
+      } else {
+        if (playIcon) playIcon.textContent = '▶';
+        if (label) label.textContent = 'Listen to Audio Note';
+        pill.style.background = '';
       }
     });
   });
 }
 
-/* ================= 10. LIVE RESCUE TICKER TOAST ================= */
+/* ================= 11. FAQ ACCORDION ================= */
+function initFaqAccordion() {
+  const faqBoxes = document.querySelectorAll('.faq-item-box');
+
+  faqBoxes.forEach(box => {
+    const trigger = box.querySelector('.faq-toggle-trigger');
+    if (!trigger) return;
+
+    trigger.addEventListener('click', () => {
+      const wasActive = box.classList.contains('active');
+
+      faqBoxes.forEach(b => {
+        b.classList.remove('active');
+        const bBtn = b.querySelector('.faq-toggle-trigger');
+        if (bBtn) bBtn.setAttribute('aria-expanded', 'false');
+      });
+
+      if (!wasActive) {
+        box.classList.add('active');
+        trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+}
+
+/* ================= 12. LIVE RESCUE TICKER TOAST ================= */
 function initRescueToast() {
   const toast = document.getElementById('rescueToast');
   const headline = document.getElementById('toastHeadline');
@@ -402,12 +457,10 @@ function initRescueToast() {
   let idx = 0;
   let isDismissed = false;
 
-  // Initial trigger
   setTimeout(() => {
     if (!isDismissed) advanceToast();
   }, 4000);
 
-  // Cycle every 9 seconds
   setInterval(() => {
     if (!isDismissed) advanceToast();
   }, 9000);
@@ -434,26 +487,23 @@ function initRescueToast() {
   }
 }
 
-/* ================= 11. MODALS & MULTI-STEP DONATION WIZARD ================= */
+/* ================= 13. MODALS & MULTI-STEP DONATION WIZARD ================= */
 function initModalTriggers() {
-  // Bind CTA triggers
-  bindClick('navDonateBtn', () => openModal('donateModal'));
-  bindClick('heroPrimaryDonate', () => openModal('donateModal'));
-  bindClick('mobileDrawerDonate', () => openModal('donateModal'));
+  bindClick('openDonateModalBtn', () => openModal('donateModal'));
+  bindClick('heroDonateCta', () => openModal('donateModal'));
+  bindClick('mobDonateBtn', () => openModal('donateModal'));
 
-  bindClick('navNgoBtn', () => openModal('ngoModal'));
-  bindClick('mobileDrawerNgo', () => openModal('ngoModal'));
+  bindClick('openNgoModalBtn', () => openModal('ngoModal'));
+  bindClick('mobNgoBtn', () => openModal('ngoModal'));
 
-  bindClick('mobileDrawerVol', () => openModal('volunteerModal'));
+  bindClick('mobVolBtn', () => openModal('volunteerModal'));
 
-  // Close when clicking outside
   document.querySelectorAll('.modal-backdrop').forEach(modal => {
     modal.addEventListener('click', (e) => {
       if (e.target === modal) closeModal(modal.id);
     });
   });
 
-  // Close on Escape key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       document.querySelectorAll('.modal-backdrop.open').forEach(modal => {
@@ -484,7 +534,7 @@ window.closeModal = function(id) {
   }
 };
 
-// Wizard Step Navigation
+// Multi-step Wizard Navigation
 window.nextWizStep = function(stepNum) {
   if (stepNum === 2) {
     const name = document.getElementById('donorName').value.trim();
@@ -492,7 +542,7 @@ window.nextWizStep = function(stepNum) {
     const address = document.getElementById('donorAddress').value.trim();
 
     if (!name || !phone || !address) {
-      alert('Please fill in your Organization Name, Phone, and Address before continuing.');
+      alert('Please fill in your Kitchen Name, Phone, and Address before continuing.');
       return;
     }
   }
@@ -510,7 +560,7 @@ window.nextWizStep = function(stepNum) {
       return;
     }
 
-    // Populate summary
+    // Populate summary review card
     document.getElementById('sumName').textContent = document.getElementById('donorName').value;
     document.getElementById('sumCategory').textContent = document.getElementById('foodCategory').value;
     document.getElementById('sumPortions').textContent = `${portions} Portions (~${Math.round(portions / 2)} kg)`;
@@ -526,21 +576,21 @@ window.nextWizStep = function(stepNum) {
   }
 };
 
-// Handle Donation Submit
+// Submit Donation
 window.submitDonation = function(e) {
   e.preventDefault();
   const form = document.getElementById('donationForm');
-  const successView = document.getElementById('donateSuccess');
-  const trackIdEl = document.getElementById('dynTrackingId');
+  const success = document.getElementById('donateSuccess');
+  const trackId = document.getElementById('dynTrackingId');
 
-  const randomNum = Math.floor(1000 + Math.random() * 9000);
-  if (trackIdEl) trackIdEl.textContent = `FB-${randomNum}-EXP`;
+  const randomCode = Math.floor(1000 + Math.random() * 9000);
+  if (trackId) trackId.textContent = `FB-${randomCode}-EXP`;
 
   if (form) form.classList.add('hidden');
-  if (successView) successView.classList.remove('hidden');
+  if (success) success.classList.remove('hidden');
 };
 
-// Handle NGO Submit
+// Submit NGO Application
 window.submitNgo = function(e) {
   e.preventDefault();
   const form = document.getElementById('ngoForm');
@@ -549,7 +599,7 @@ window.submitNgo = function(e) {
   if (success) success.classList.remove('hidden');
 };
 
-// Handle Volunteer Submit
+// Submit Volunteer Application
 window.submitVolunteer = function(e) {
   e.preventDefault();
   const form = document.getElementById('volunteerForm');
@@ -558,7 +608,7 @@ window.submitVolunteer = function(e) {
   if (success) success.classList.remove('hidden');
 };
 
-// Handle Newsletter Submit
+// Newsletter
 window.handleNewsletter = function(e) {
   e.preventDefault();
   const input = document.getElementById('newsletterInput');
